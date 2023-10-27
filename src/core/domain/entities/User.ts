@@ -1,8 +1,6 @@
 import Email from "../shared/Email"
-import HashPassword from "../shared/HashPassword"
 import Id from "../shared/Id"
 import NameLastName from "../shared/NameLastName"
-import StrongPassword from "../shared/StrongPassword"
 
 export default class User {
   private constructor(
