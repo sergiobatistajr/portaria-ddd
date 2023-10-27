@@ -9,7 +9,7 @@ export default class UserRegisterRepositoryDatabase implements UserRepository {
       "select * from portaria.user where email = $1",
       [email]
     )
-    connection.$pool.end()
+    await connection.$pool.end()
     return user
       ? User.create(user.name, user.email, user.password, user.id)
       : null
@@ -21,10 +21,11 @@ export default class UserRegisterRepositoryDatabase implements UserRepository {
       "insert into portaria.user (id, name, email, password) values ($1, $2, $3, $4)",
       [user.id, user.name, user.email, user.password]
     )
-    connection.$pool.end()
+    await connection.$pool.end()
   }
   async delete(id: string): Promise<void> {
     const connection = pgp()("postgres://admin:admin@localhost:5432/app")
     await connection.query("delete from portaria.user where id = $1", [id])
+    await connection.$pool.end()
   }
 }

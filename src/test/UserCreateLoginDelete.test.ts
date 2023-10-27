@@ -16,6 +16,5 @@ test("Deve criar, logar e deletar o usuario", async function () {
     password: input.password,
   })
   expect(login.status).toBe("logado")
-  const deleted = await new DeleteUser(db).execute(login.id)
-  expect(deleted.status).toBe("deleted")
+  await new DeleteUser(db).execute(login.id)
 })

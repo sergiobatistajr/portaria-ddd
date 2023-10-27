@@ -5,11 +5,6 @@ export default class DeleteUser {
 
   async execute(id: string): Promise<Output> {
     await this.userRepository.delete(id)
-    return {
-      status: "deleted",
-    }
   }
 }
-type Output = {
-  status: string
-}
+type Output = void

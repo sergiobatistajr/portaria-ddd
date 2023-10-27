@@ -5,7 +5,7 @@ import StrongPassword from "../../domain/shared/StrongPassword"
 
 export default class RegisterUser {
   constructor(readonly userRepository: UserRepository) {}
-  async execute(input: Input) {
+  async execute(input: Input): Promise<Output> {
     const user = await this.userRepository.findByEmail(input.email)
     if (user) {
       throw new Error("Usuário já existe")
@@ -20,3 +20,5 @@ type Input = {
   email: string
   password: string
 }
+
+type Output = void
