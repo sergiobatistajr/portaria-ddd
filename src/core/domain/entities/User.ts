@@ -13,9 +13,9 @@ export default class User {
   ) {}
 
   static create(name: string, email: string, password: string, id?: string) {
-    const _id = id ? id : new Id().generate()
-    const _name = new NameLastName(name).value
-    const _email = new Email(email).value
+    const _id = id ? id : Id.generate()
+    const _name = NameLastName.validade(name)
+    const _email = Email.validade(email)
     const _password = password
     return new User(_id, _name, _email, _password)
   }

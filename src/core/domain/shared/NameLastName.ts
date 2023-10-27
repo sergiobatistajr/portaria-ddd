@@ -1,10 +1,11 @@
 export default class NameLastName {
-  constructor(readonly value: string) {
-    if (!value) {
+  static validade(nameLastName: string) {
+    if (!nameLastName) {
       throw new Error("Nome é obrigatório")
     }
-    if (!value.split(" ")[1]) {
+    if (!nameLastName.split(" ")[1]) {
       throw new Error("Sobrenome é obrigatório")
     }
+    return nameLastName
   }
 }

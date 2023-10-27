@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto"
 export default class Id {
-  generate() {
+  static generate() {
     return randomUUID()
   }
 }
