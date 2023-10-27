@@ -1,4 +1,5 @@
 import Email from "../shared/Email"
+import HashPassword from "../shared/HashPassword"
 import Id from "../shared/Id"
 import NameLastName from "../shared/NameLastName"
 import StrongPassword from "../shared/StrongPassword"
@@ -15,7 +16,7 @@ export default class User {
     const _id = id ? id : new Id().generate()
     const _name = new NameLastName(name).value
     const _email = new Email(email).value
-    const _password = new StrongPassword(password).value
+    const _password = password
     return new User(_id, _name, _email, _password)
   }
 }

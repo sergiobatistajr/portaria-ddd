@@ -11,7 +11,10 @@ test("Deve criar, logar e deletar o usuario", async function () {
     password: "12345678",
   }
   await new RegisterUser(db).execute(input)
-  const login = await new LoginUser(db).execute({ email: input.email })
+  const login = await new LoginUser(db).execute({
+    email: input.email,
+    password: input.password,
+  })
   expect(login.status).toBe("logado")
   const deleted = await new DeleteUser(db).execute(login.id)
   expect(deleted.status).toBe("deleted")

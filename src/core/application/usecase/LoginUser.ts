@@ -1,3 +1,4 @@
+import HashPassword from "../../domain/shared/HashPassword"
 import UserRepository from "../repository/UserRepository"
 
 export default class LoginUser {
@@ -8,6 +9,10 @@ export default class LoginUser {
     if (!user) {
       throw new Error("Usuário não registrado")
     }
+    const isValid = HashPassword.verify(input.password, user.password)
+    if (!isValid) {
+      throw new Error("Senha inválida")
+    }
     return {
       id: user.id,
       status: "logado",
@@ -17,6 +22,7 @@ export default class LoginUser {
 
 type Input = {
   email: string
+  password: string
 }
 type Output = {
   id: string
