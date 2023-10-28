@@ -3,6 +3,12 @@ import GuestRepository from "../core/application/repository/GuestRepository"
 import Guest from "../core/domain/entities/Guest"
 
 class MockGuestRepository implements GuestRepository {
+  update(guest: Guest): Promise<void> {
+    throw new Error("Method not implemented.")
+  }
+  findByIdAndStatus(id: string, status: string): Promise<Guest | null> {
+    throw new Error("Method not implemented.")
+  }
   private guests: Guest[] = []
   async findByPlateAndStatus(
     plate: string,
@@ -43,8 +49,7 @@ describe("RegisterGuestEntry", () => {
     )
     expect(guest).toBeDefined()
     expect(guest?.name).toBe(input.name)
-    expect(guest?.entryDate.toISOString()).toBe(input.entryDate.toISOString())
-    expect(guest?.entryDate).toStrictEqual(input.entryDate)
+    expect(guest?.entryDate).toEqual(input.entryDate)
     expect(guest?.createdBy).toBe(input.createdBy)
     expect(guest?.plate).toBe(input.plate)
     expect(guest?.model).toBe(input.model)
