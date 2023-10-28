@@ -14,8 +14,8 @@ export default class Guest {
     readonly pax?: number,
     readonly apartment?: number,
     readonly observation?: string,
-    readonly departureDate?: Date,
-    readonly status?: string
+    readonly status?: string,
+    readonly departureDate?: Date
   ) {}
 
   static create(
@@ -27,8 +27,8 @@ export default class Guest {
     pax?: number,
     apartment?: number,
     observation?: string,
-    departureDate?: Date,
     status?: string,
+    departureDate?: Date,
     id?: string
   ) {
     const _id = id ? id : Id.generate()
@@ -52,8 +52,8 @@ export default class Guest {
       _pax,
       _apartment,
       _observation,
-      _departureDate,
-      _status
+      _status,
+      _departureDate
     )
   }
 }
