@@ -1,4 +1,4 @@
-import Apartment from "../core/domain/shared/Apartment"
+import Apartment from "./Apartment"
 
 describe("Apartment", () => {
   describe("validate", () => {

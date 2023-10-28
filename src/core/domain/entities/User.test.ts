@@ -1,4 +1,4 @@
-import User from "../core/domain/entities/User"
+import User from "./User"
 
 describe("User", () => {
   it("should create a user with valid data", () => {

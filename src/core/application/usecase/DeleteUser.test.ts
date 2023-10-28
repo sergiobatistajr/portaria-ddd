@@ -1,6 +1,6 @@
-import DeleteUser from "../core/application/usecase/DeleteUser"
-import UserRepository from "../core/application/repository/UserRepository"
-import User from "../core/domain/entities/User"
+import DeleteUser from "./DeleteUser"
+import UserRepository from "../repository/UserRepository"
+import User from "../../domain/entities/User"
 
 class MockUserRepository implements UserRepository {
   private users: User[] = []

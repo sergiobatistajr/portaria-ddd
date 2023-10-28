@@ -1,6 +1,6 @@
-import RegisterGuestDeparture from "../core/application/usecase/RegisterGuestDeparture"
-import GuestRepository from "../core/application/repository/GuestRepository"
-import Guest from "../core/domain/entities/Guest"
+import RegisterGuestDeparture from "./RegisterGuestDeparture"
+import GuestRepository from "../repository/GuestRepository"
+import Guest from "../../domain/entities/Guest"
 
 class MockGuestRepository implements GuestRepository {
   private guests: Guest[] = []

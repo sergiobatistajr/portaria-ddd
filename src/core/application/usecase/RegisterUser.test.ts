@@ -1,6 +1,6 @@
-import RegisterUser from "../core/application/usecase/RegisterUser"
-import UserRepository from "../core/application/repository/UserRepository"
-import User from "../core/domain/entities/User"
+import RegisterUser from "./RegisterUser"
+import UserRepository from "../repository/UserRepository"
+import User from "../../domain/entities/User"
 
 class MockUserRepository implements UserRepository {
   private users: User[] = []

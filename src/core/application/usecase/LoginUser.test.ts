@@ -1,7 +1,7 @@
-import LoginUser from "../core/application/usecase/LoginUser"
-import UserRepository from "../core/application/repository/UserRepository"
-import User from "../core/domain/entities/User"
-import HashPassword from "../core/domain/shared/HashPassword"
+import LoginUser from "./LoginUser"
+import UserRepository from "../repository/UserRepository"
+import User from "../../domain/entities/User"
+import HashPassword from "../../domain/shared/HashPassword"
 
 class MockUserRepository implements UserRepository {
   private users: User[] = [

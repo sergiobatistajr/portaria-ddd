@@ -1,6 +1,6 @@
-import RegisterGuestEntry from "../core/application/usecase/RegisterGuestEntry"
-import GuestRepository from "../core/application/repository/GuestRepository"
-import Guest from "../core/domain/entities/Guest"
+import RegisterGuestEntry from "./RegisterGuestEntry"
+import GuestRepository from "../repository/GuestRepository"
+import Guest from "../../domain/entities/Guest"
 
 class MockGuestRepository implements GuestRepository {
   update(guest: Guest): Promise<void> {
