@@ -3,6 +3,12 @@ import UserRepository from "../repository/UserRepository"
 import User from "../../domain/entities/User"
 
 class MockUserRepository implements UserRepository {
+  findFilteredUsers(query: string, currentPage: number): Promise<User[]> {
+    throw new Error("Method not implemented.")
+  }
+  findUsersPage(query: string): Promise<number> {
+    throw new Error("Method not implemented.")
+  }
   private users: User[] = []
   async findByEmail(email: string): Promise<User | null> {
     const user = this.users.find((user) => user.email === email)

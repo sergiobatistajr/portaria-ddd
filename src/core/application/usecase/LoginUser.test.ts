@@ -4,6 +4,12 @@ import User from "../../domain/entities/User"
 import HashPassword from "../../domain/shared/HashPassword"
 
 class MockUserRepository implements UserRepository {
+  findFilteredUsers(query: string, currentPage: number): Promise<User[]> {
+    throw new Error("Method not implemented.")
+  }
+  findUsersPage(query: string): Promise<number> {
+    throw new Error("Method not implemented.")
+  }
   private users: User[] = [
     User.create(
       "John Doe",
