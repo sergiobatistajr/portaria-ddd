@@ -1,30 +1,21 @@
 "use client"
 
-import * as React from "react"
-
 import { cn } from "@/lib/utils"
-import { Icons } from "@/components/ui/icons"
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useFormState } from "react-dom"
+import { authenticate } from "@/lib/actions"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
-
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault()
-    setIsLoading(true)
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
-  }
+  const [code, action] = useFormState(authenticate, undefined)
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <form onSubmit={onSubmit}>
+      <form action={action}>
         <div className="grid gap-2">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
@@ -37,7 +28,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading}
             />
           </div>
           <div className="grid gap-1">
@@ -51,15 +41,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCapitalize="none"
               autoComplete="password"
               autoCorrect="off"
-              disabled={isLoading}
             />
           </div>
-          <Button disabled={isLoading} type="submit">
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Faça login com e-mail e senha
-          </Button>
+          <Button type="submit">Faça login com e-mail e senha</Button>
+          {code === "CredentialSignin" && (
+            <>
+              <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
+              <p aria-live="polite" className="text-sm text-red-500">
+                Invalid credentials
+              </p>
+            </>
+          )}
         </div>
       </form>
       {/* <div className="relative">
