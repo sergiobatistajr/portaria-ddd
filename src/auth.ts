@@ -4,8 +4,11 @@ import Credentials from "next-auth/providers/credentials"
 import { z } from "zod"
 import bcrypt from "bcrypt"
 import User from "@/core/domain/entities/User"
+import UserRegisterRepositoryDatabase from "./core/infra/db/UserRepositoryDatabase"
 async function getUser(email: string): Promise<User | null> {
-  return null
+  const user = await new UserRegisterRepositoryDatabase().findByEmail(email)
+
+  return user
 }
 
 export const { auth, signIn, signOut } = NextAuth({
@@ -23,7 +26,6 @@ export const { auth, signIn, signOut } = NextAuth({
           const passwordsMatch = await bcrypt.compare(password, user.password)
           if (passwordsMatch) return user
         }
-        console.log("Invalid credentials")
         return null
       },
     }),

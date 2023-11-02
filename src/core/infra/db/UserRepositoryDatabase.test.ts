@@ -1,12 +1,13 @@
 import UserRegisterRepositoryDatabase from "./UserRepositoryDatabase"
 import User from "../../domain/entities/User"
+import RegisterUser from "../../application/usecase/RegisterUser"
 
 describe("UserRepositoryDatabase", () => {
-  const user = User.create("John Doe1", "johndoe1@example.com", "password")
+  const user = User.create("John Doe", "johndoe@example.com", "password")
 
   it("should save a user", async () => {
     const userRepository = new UserRegisterRepositoryDatabase()
-    await userRepository.save(user)
+    await new RegisterUser(userRepository).execute(user)
 
     const savedUser = await userRepository.findByEmail(user.email)
 
