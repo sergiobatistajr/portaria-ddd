@@ -1,14 +1,17 @@
 import UserRepository from "../../application/repository/UserRepository"
 import User from "../../domain/entities/User"
 import pgp from "pg-promise"
-const ITEMS_PER_PAGE = 6
+
 export default class UserRegisterRepositoryDatabase implements UserRepository {
-  async findFilteredUsers(query: string, currentPage: number): Promise<User[]> {
+  async findFilteredUsers(
+    query: string,
+    itemsPerPage: number,
+    offset: number
+  ): Promise<User[]> {
     const db = pgp()("postgres://admin:admin@localhost:5432/app")
-    const offset = (currentPage - 1) * ITEMS_PER_PAGE
     const users = await db.any(
-      "select * from portaria.user where name ilike $1 limit $2 offset $3",
-      [`%${query}%`, ITEMS_PER_PAGE, offset]
+      "select * from portaria.user where email ilike $1 limit $2 offset $3",
+      [`%${query}%`, itemsPerPage, offset]
     )
     await db.$pool.end()
     return users.map((user) =>
@@ -17,12 +20,12 @@ export default class UserRegisterRepositoryDatabase implements UserRepository {
   }
   async findUsersPage(query: string): Promise<number> {
     const db = pgp()("postgres://admin:admin@localhost:5432/app")
-    const count = await db.one(
-      "select count(*) from portaria.user where name ilike $1",
+    const { count } = await db.one(
+      "select count(*) from portaria.user where email ilike $1",
       [`%${query}%`]
     )
     await db.$pool.end()
-    return Math.ceil(count.count / ITEMS_PER_PAGE)
+    return count
   }
   async findByEmail(email: string): Promise<User | null> {
     const db = pgp()("postgres://admin:admin@localhost:5432/app")
