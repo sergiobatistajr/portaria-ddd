@@ -15,7 +15,8 @@ export default class LoginUser {
     }
     return {
       id: user.id,
-      status: "logado",
+      email: user.email,
+      name: user.name,
     }
   }
 }
@@ -26,5 +27,6 @@ type Input = {
 }
 type Output = {
   id: string
-  status: string
+  email: string
+  name: string
 }
