@@ -14,11 +14,11 @@ export function NavLinks() {
     },
     {
       title: "Entrada",
-      href: "/dashboard/entry",
+      href: "/dashboard/entry/vehicle",
     },
     {
-      title: "Appearance",
-      href: "/dashboard/appearance",
+      title: "Saída",
+      href: "/dashboard/exit",
     },
     {
       title: "Notifications",

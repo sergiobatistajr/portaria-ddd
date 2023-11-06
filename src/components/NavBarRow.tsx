@@ -12,7 +12,7 @@ interface NavBarProps extends React.HTMLAttributes<HTMLElement> {
   }[]
 }
 
-export function NavBar({ className, items, ...props }: NavBarProps) {
+export function NavBarRow({ className, items, ...props }: NavBarProps) {
   const pathname = usePathname()
 
   return (

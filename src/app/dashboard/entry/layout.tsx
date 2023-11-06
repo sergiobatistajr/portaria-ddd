@@ -1,4 +1,4 @@
-import { NavBar } from "@/components/Nav"
+import { NavBarRow } from "@/components/NavBarRow"
 import { Separator } from "@/components/ui/separator"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="flex flex-col space-y-2">
-        <NavBar items={navItems} />
+        <NavBarRow items={navItems} />
         <Separator className="my-2 w-2/6" />
         <div className="flex-1 lg:max-w-2xl">{children}</div>
       </div>

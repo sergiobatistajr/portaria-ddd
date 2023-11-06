@@ -46,13 +46,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             />
           </div>
           <Button type="submit">Faça login com e-mail e senha</Button>
-          {code === "CredentialSignin" && (
-            <>
+          {code === "Credenciais inválidas" && (
+            <div className="flex space-x-1">
               <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
               <p aria-live="polite" className="text-sm text-red-500">
-                Invalid credentials
+                Credenciais inválidas
               </p>
-            </>
+            </div>
           )}
         </div>
       </form>
