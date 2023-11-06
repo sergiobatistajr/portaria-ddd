@@ -1,3 +1,9 @@
+import { GuestForm } from "./form"
+
 export default function Page() {
-  return <main>Guest</main>
+  return (
+    <main>
+      <GuestForm />
+    </main>
+  )
 }
