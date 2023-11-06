@@ -8,7 +8,7 @@ export function GuestForm() {
     <form action={action} className="space-y-4">
       <label htmlFor="name">Nome completo</label>
       <Input
-        placeholder="Fulado da Silva"
+        placeholder="João da Silva"
         id="name"
         name="name"
         autoCapitalize="on"

@@ -21,7 +21,7 @@ export async function saveEntryGuest(formData: FormData) {
       const input = {
         ...newGuest.data,
         entryDate: new Date(newGuest.data.entryDate),
-        createdBy: session.user.id as string,
+        createdBy: session?.user?.id as string,
       }
       await new RegisterGuestEntry(db).execute(input)
     } else {
@@ -52,7 +52,7 @@ export async function saveEntryVehicle(formData: FormData) {
       const input = {
         ...newGuest.data,
         entryDate: new Date(newGuest.data.entryDate),
-        createdBy: session.user.id as string,
+        createdBy: session?.user?.id as string,
       }
       await new RegisterGuestEntry(db).execute(input)
     } else {
