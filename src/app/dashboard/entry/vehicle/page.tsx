@@ -1,3 +1,9 @@
+import { VehicleForm } from "./form"
+
 export default function Page() {
-  return <main>Vehicle</main>
+  return (
+    <main>
+      <VehicleForm />
+    </main>
+  )
 }

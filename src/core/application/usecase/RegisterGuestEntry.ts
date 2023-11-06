@@ -5,14 +5,20 @@ export default class RegisterGuestEntry {
   constructor(readonly guestRepository: GuestRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    let guest
     const status = "inside"
     if (input.plate) {
-      guest = await this.guestRepository.findByPlateAndStatus(
-        input.plate,
+      const guestVehicle = await this.guestRepository.findByPlateAndStatus(
+        input?.plate,
         status
       )
+      if (guestVehicle) {
+        throw new Error("Veículo já está dentro")
+      }
     }
+    const guest = await this.guestRepository.findByNameAndStatusWithOutPlate(
+      input.name,
+      status
+    )
     if (guest) {
       throw new Error("Visitante já está dentro")
     }

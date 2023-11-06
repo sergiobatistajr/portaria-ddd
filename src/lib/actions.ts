@@ -1,8 +1,13 @@
 "use server"
 import { z } from "zod"
 import { signIn } from "@/auth"
+import GuestRepositoryDatabase from "@/core/infra/db/GuestRepositoryDatabase"
+import RegisterGuestEntry from "@/core/application/usecase/RegisterGuestEntry"
+import { auth } from "@/auth"
 
 export async function saveEntryGuest(formData: FormData) {
+  const db = new GuestRepositoryDatabase()
+  const session = await auth()
   try {
     const newGuest = z
       .object({
@@ -13,7 +18,12 @@ export async function saveEntryGuest(formData: FormData) {
       })
       .safeParse(Object.fromEntries(formData))
     if (newGuest.success) {
-      console.log(newGuest.data)
+      const input = {
+        ...newGuest.data,
+        entryDate: new Date(newGuest.data.entryDate),
+        createdBy: session.user.id as string,
+      }
+      await new RegisterGuestEntry(db).execute(input)
     } else {
       console.log(newGuest.error)
     }
@@ -24,6 +34,8 @@ export async function saveEntryGuest(formData: FormData) {
   }
 }
 export async function saveEntryVehicle(formData: FormData) {
+  const db = new GuestRepositoryDatabase()
+  const session = await auth()
   try {
     const newGuest = z
       .object({
@@ -37,7 +49,12 @@ export async function saveEntryVehicle(formData: FormData) {
       })
       .safeParse(Object.fromEntries(formData))
     if (newGuest.success) {
-      console.log(newGuest.data)
+      const input = {
+        ...newGuest.data,
+        entryDate: new Date(newGuest.data.entryDate),
+        createdBy: session.user.id as string,
+      }
+      await new RegisterGuestEntry(db).execute(input)
     } else {
       console.log(newGuest.error)
     }
