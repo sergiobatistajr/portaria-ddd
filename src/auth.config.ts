@@ -1,11 +1,31 @@
-import type { NextAuthConfig } from "next-auth"
+import type { DefaultSession, NextAuthConfig } from "next-auth"
 
-export const authConfig = {
+declare module "@auth/core" {
+  interface Session {
+    user: {
+      id?: string
+    } & DefaultSession["user"]
+  }
+}
+
+export const authConfig: NextAuthConfig = {
   providers: [],
   pages: {
     signIn: "/login",
   },
   callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        return { ...token, id: user.id }
+      }
+      return token
+    },
+    session({ session, token }) {
+      return {
+        ...session,
+        user: { ...session.user, id: token.id },
+      }
+    },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
       const isOnDashboard = nextUrl.pathname.startsWith("/dashboard")
@@ -18,4 +38,4 @@ export const authConfig = {
       return true
     },
   },
-} satisfies NextAuthConfig
+}
