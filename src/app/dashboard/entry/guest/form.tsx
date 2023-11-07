@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { saveEntryGuest as action } from "@/lib/actions"
+
 export function GuestForm() {
   return (
     <form action={action} className="space-y-4">
@@ -11,7 +12,6 @@ export function GuestForm() {
         placeholder="João da Silva"
         id="name"
         name="name"
-        autoCapitalize="on"
         type="text"
         required
       />

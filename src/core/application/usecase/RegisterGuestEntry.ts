@@ -6,7 +6,7 @@ export default class RegisterGuestEntry {
 
   async execute(input: Input): Promise<Output> {
     const status = "inside"
-    if (input.plate) {
+    if (input?.plate) {
       const guestVehicle = await this.guestRepository.findByPlateAndStatus(
         input?.plate,
         status
@@ -22,19 +22,18 @@ export default class RegisterGuestEntry {
     if (guest) {
       throw new Error("Visitante já está dentro")
     }
-    await this.guestRepository.save(
-      Guest.create(
-        input.name,
-        input.entryDate,
-        input.createdBy,
-        input.plate,
-        input.model,
-        input.pax,
-        input.apartment,
-        input.observation,
-        status
-      )
+    const newGuest = Guest.create(
+      input.name,
+      input.entryDate,
+      input.createdBy,
+      input.plate,
+      input.model,
+      input.pax,
+      input.apartment,
+      input.observation,
+      status
     )
+    await this.guestRepository.save(newGuest)
   }
 }
 

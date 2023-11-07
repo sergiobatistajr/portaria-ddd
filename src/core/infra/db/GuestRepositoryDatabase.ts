@@ -1,5 +1,5 @@
 import GuestRepository from "@/core/application/repository/GuestRepository"
-import Guest from "@/core/domain/entities/Guest"
+import Guest from "../../domain/entities/Guest"
 import pgp from "pg-promise"
 
 export default class GuestRepositoryDatabase implements GuestRepository {
@@ -62,19 +62,21 @@ export default class GuestRepositoryDatabase implements GuestRepository {
       [name, status]
     )
     await db.$pool.end()
-    return Guest.create(
-      guest.name,
-      guest.entrydate,
-      guest.createdby,
-      guest.plate,
-      guest.model,
-      parseInt(guest.pax),
-      parseInt(guest.apartment),
-      guest.observation,
-      guest.status,
-      guest.departuredate,
-      guest.id
-    )
+    return guest
+      ? Guest.create(
+          guest.name,
+          guest.entrydate,
+          guest.createdby,
+          guest.plate,
+          guest.model,
+          parseInt(guest.pax),
+          parseInt(guest.apartment),
+          guest.observation,
+          guest.status,
+          guest.departuredate,
+          guest.id
+        )
+      : null
   }
 
   async findByPlateAndStatus(
@@ -87,19 +89,21 @@ export default class GuestRepositoryDatabase implements GuestRepository {
       [plate, status]
     )
     await db.$pool.end()
-    return Guest.create(
-      guest.name,
-      guest.entrydate,
-      guest.createdby,
-      guest.plate,
-      guest.model,
-      parseInt(guest.pax),
-      parseInt(guest.apartment),
-      guest.observation,
-      guest.status,
-      guest.departuredate,
-      guest.id
-    )
+    return guest
+      ? Guest.create(
+          guest.name,
+          guest.entrydate,
+          guest.createdby,
+          guest.plate,
+          guest.model,
+          parseInt(guest.pax),
+          parseInt(guest.apartment),
+          guest.observation,
+          guest.status,
+          guest.departuredate,
+          guest.id
+        )
+      : null
   }
 
   async save(guest: Guest): Promise<void> {

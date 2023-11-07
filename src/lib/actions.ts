@@ -6,10 +6,10 @@ import RegisterGuestEntry from "@/core/application/usecase/RegisterGuestEntry"
 import { auth } from "@/auth"
 
 export async function saveEntryGuest(formData: FormData) {
-  const db = new GuestRepositoryDatabase()
-  const session = await auth()
   try {
-    const newGuest = z
+    const db = new GuestRepositoryDatabase()
+    const session = await auth()
+    const parsed = z
       .object({
         name: z.string().min(1),
         entryDate: z.string().min(1),
@@ -17,15 +17,15 @@ export async function saveEntryGuest(formData: FormData) {
         apartment: z.coerce.number().optional(),
       })
       .safeParse(Object.fromEntries(formData))
-    if (newGuest.success) {
-      const input = {
-        ...newGuest.data,
-        entryDate: new Date(newGuest.data.entryDate),
-        createdBy: session?.user?.id as string,
-      }
-      await new RegisterGuestEntry(db).execute(input)
-    } else {
-      console.log(newGuest.error)
+    if (parsed.success) {
+      const { name, entryDate, apartment, observation } = parsed.data
+      await new RegisterGuestEntry(db).execute({
+        name,
+        entryDate: new Date(entryDate),
+        createdBy: session?.user?.id,
+        apartment,
+        observation,
+      })
     }
   } catch (error) {
     if (error instanceof Error) {
@@ -69,6 +69,7 @@ export async function authenticate(
   formData: FormData
 ) {
   try {
+    console.log(formData)
     await signIn("credentials", Object.fromEntries(formData))
   } catch (error) {
     if (error instanceof Error) {
