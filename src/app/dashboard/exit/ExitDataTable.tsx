@@ -15,6 +15,9 @@ export default async function ExitDateTable({
       id: g.id,
       nomeCompleto: g.name,
       dataEntrada: g.entryDate.toISOString().split("T")[0],
+      placa: g.plate ?? "-",
+      modelo: g.model ?? "-",
+      apartamento: g.apartment?.toString() ?? "-",
     }
   })
 
