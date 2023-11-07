@@ -20,7 +20,7 @@ export default async function Page({
     <main>
       <h1 className="flex justify-center text-3xl">Saídas</h1>
       <div className="mt-2">
-        <Suspense fallback={<h1>Carregando</h1>}>
+        <Suspense key={query + currentPage} fallback={<h1>Carregando</h1>}>
           <ExitDateTable query={query} currentPage={currentPage} />
         </Suspense>
         <Pagination totalPages={totalPages} />

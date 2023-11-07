@@ -9,13 +9,13 @@ import CountGuestsInsidePage from "@/core/application/usecase/CountGuestsInsideP
 
 export async function fetchGuestFiltered(query: string, currentPage: number) {
   noStore()
-
   try {
     const db = new GuestRepositoryDatabase()
     const guests = await new FindGuestInsideFiltered(db).execute(
       query,
       currentPage
     )
+    await new Promise((resolve) => setTimeout(resolve, 3000))
     return guests
   } catch (error) {
     if (error instanceof Error) {
