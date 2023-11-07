@@ -9,5 +9,5 @@ export default interface UserRepository {
     itemsPerPage: number,
     offset: number
   ): Promise<User[]>
-  findUsersPage(query: string): Promise<number>
+  countUsersPage(query: string): Promise<number>
 }

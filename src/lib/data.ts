@@ -1,19 +1,47 @@
 "use server"
 import FindFilteredUsers from "@/core/application/usecase/FindFilteredUsers"
-import FindUsersPage from "@/core/application/usecase/FindUsersPage"
+import FindUsersPage from "@/core/application/usecase/CountUsersPage"
 import UserRegisterRepositoryDatabase from "@/core/infra/db/UserRepositoryDatabase"
 import { unstable_noStore as noStore } from "next/cache"
-const itemsPerPage = 1
+import GuestRepositoryDatabase from "@/core/infra/db/GuestRepositoryDatabase"
+import FindGuestInsideFiltered from "@/core/application/usecase/FindGuestsInsideFiltered"
+
+export async function fetchGuestFiltered(query: string, currentPage: number) {
+  noStore()
+
+  try {
+    const db = new GuestRepositoryDatabase()
+    const guests = await new FindGuestInsideFiltered(db).execute(
+      query,
+      currentPage
+    )
+    return guests
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message)
+    }
+  }
+}
+
+export async function fetchCountGuestsPage(query: string) {
+  noStore()
+  try {
+    const db = new UserRegisterRepositoryDatabase()
+    const totalPages = await new FindUsersPage(db).execute(query)
+    return totalPages
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message)
+    }
+  }
+}
+
 export async function fetchUsersFiltered(query: string, currentPage: number) {
   noStore()
 
   try {
     const db = new UserRegisterRepositoryDatabase()
-    const users = await new FindFilteredUsers(db).execute(
-      query,
-      currentPage,
-      itemsPerPage
-    )
+    const users = await new FindFilteredUsers(db).execute(query, currentPage)
     return users
   } catch (error) {
     if (error instanceof Error) {
@@ -26,7 +54,7 @@ export async function fetchUsersPage(query: string) {
   noStore()
   try {
     const db = new UserRegisterRepositoryDatabase()
-    const totalPages = await new FindUsersPage(db).execute(query, itemsPerPage)
+    const totalPages = await new FindUsersPage(db).execute(query)
     return totalPages
   } catch (error) {
     if (error instanceof Error) {

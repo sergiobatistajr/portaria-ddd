@@ -18,7 +18,7 @@ export default class UserRegisterRepositoryDatabase implements UserRepository {
       User.create(user.name, user.email, user.password, user.id)
     )
   }
-  async findUsersPage(query: string): Promise<number> {
+  async countUsersPage(query: string): Promise<number> {
     const db = pgp()("postgres://admin:admin@localhost:5432/app")
     const { count } = await db.one(
       "select count(*) from portaria.user where email ilike $1",
