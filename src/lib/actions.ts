@@ -4,6 +4,7 @@ import { signIn } from "@/auth"
 import GuestRepositoryDatabase from "@/core/infra/db/GuestRepositoryDatabase"
 import RegisterGuestEntry from "@/core/application/usecase/RegisterGuestEntry"
 import { auth } from "@/auth"
+import { revalidatePath } from "next/cache"
 
 export async function saveEntryGuest(formData: FormData) {
   try {
@@ -27,6 +28,7 @@ export async function saveEntryGuest(formData: FormData) {
         observation,
       })
     }
+    revalidatePath("/dashboard/exit")
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message)

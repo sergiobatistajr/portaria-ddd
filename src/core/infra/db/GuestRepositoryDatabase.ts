@@ -39,14 +39,15 @@ export default class GuestRepositoryDatabase implements GuestRepository {
   async countGuestsPage(query: string, status: string): Promise<number> {
     const db = pgp()("postgres://admin:admin@localhost:5432/app")
     const countSQL =
-      "select * from portaria.guest where (name ilike $1 or plate ilike $2) and status = $3"
-    const count = await db.one<number>(countSQL, [
+      "select count(*) from portaria.guest where (name ilike $1 or plate ilike $2) and status = $3"
+    const result = await db.one<{ count: number }>(countSQL, [
       `%${query}%`,
       `%${query}%`,
       status,
     ])
     await db.$pool.end()
-    return count
+
+    return result.count
   }
   findByIdAndStatus(id: string, status: string): Promise<Guest | null> {
     throw new Error("Method not implemented.")

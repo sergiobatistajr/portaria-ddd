@@ -5,6 +5,7 @@ import UserRegisterRepositoryDatabase from "@/core/infra/db/UserRepositoryDataba
 import { unstable_noStore as noStore } from "next/cache"
 import GuestRepositoryDatabase from "@/core/infra/db/GuestRepositoryDatabase"
 import FindGuestInsideFiltered from "@/core/application/usecase/FindGuestsInsideFiltered"
+import CountGuestsInsidePage from "@/core/application/usecase/CountGuestsInsidePage"
 
 export async function fetchGuestFiltered(query: string, currentPage: number) {
   noStore()
@@ -16,6 +17,19 @@ export async function fetchGuestFiltered(query: string, currentPage: number) {
       currentPage
     )
     return guests
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message)
+    }
+  }
+}
+
+export async function fetchCountGuestsPages(query: string) {
+  noStore()
+  try {
+    const db = new GuestRepositoryDatabase()
+    const totalPages = await new CountGuestsInsidePage(db).execute(query)
+    return totalPages
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message)
