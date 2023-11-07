@@ -4,6 +4,7 @@ import Pagination from "@/components/Pagination"
 import { Suspense } from "react"
 import ExitDateTable from "./ExitDataTable"
 import Search from "@/components/Search"
+import SkeletonDataTable from "@/components/SkeletonDataTable"
 
 export default async function Page({
   searchParams,
@@ -22,7 +23,7 @@ export default async function Page({
       <h1 className="flex justify-center text-3xl">Saídas</h1>
       <div className="mt-2 space-y-2">
         <Search placeholder="Procurar visitante..." />
-        <Suspense key={query + currentPage} fallback={<h1>Carregando</h1>}>
+        <Suspense key={query + currentPage} fallback={<SkeletonDataTable />}>
           <ExitDateTable query={query} currentPage={currentPage} />
         </Suspense>
         <Pagination totalPages={totalPages} />
