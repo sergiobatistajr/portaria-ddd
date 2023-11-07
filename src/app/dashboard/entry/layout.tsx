@@ -14,9 +14,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   ]
   return (
     <div>
+      <h1 className="flex text-3xl">Entrada</h1>
+      <Separator className="mb-2 w-[115px]" />
       <NavBarRow items={navItems} />
-      <Separator className="my-2 w-2/6" />
-      <div className="flex-1 lg:max-w-2xl">{children}</div>
+      <div className="flex-1 lg:max-w-2xl mt-2">{children}</div>
     </div>
   )
 }

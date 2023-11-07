@@ -20,7 +20,7 @@ export default async function Page({
 
   return (
     <main>
-      <h1 className="flex justify-center text-3xl">Saídas</h1>
+      <h1 className="flex text-3xl">Saídas</h1>
       <div className="mt-2 space-y-2">
         <Search placeholder="Procurar visitante..." />
         <Suspense key={query + currentPage} fallback={<SkeletonDataTable />}>

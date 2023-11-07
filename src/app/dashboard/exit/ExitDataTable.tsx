@@ -18,7 +18,6 @@ export default async function ExitDateTable({
       placa: g.plate ?? "-",
       modelo: g.model ?? "-",
       apartamento: g.apartment?.toString() ?? "-",
-      observacao: g.observation ?? "-",
     }
   })
 

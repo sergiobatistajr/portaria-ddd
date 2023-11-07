@@ -8,7 +8,6 @@ type DTO = {
   placa: string
   modelo: string
   apartamento: string
-  observacao: string
 }
 
 export const columns: ColumnDef<DTO>[] = [
@@ -31,9 +30,5 @@ export const columns: ColumnDef<DTO>[] = [
   {
     accessorKey: "apartamento",
     header: "Apartamento",
-  },
-  {
-    accessorKey: "observacao",
-    header: "Observação?",
   },
 ]
