@@ -1,5 +1,4 @@
 import { fetchCountGuestsPages } from "@/lib/data"
-
 import Pagination from "@/components/Pagination"
 import { Suspense } from "react"
 import ExitDateTable from "./ExitDataTable"
