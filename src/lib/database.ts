@@ -6,11 +6,7 @@ declare global {
   var db: IDatabase<any> | undefined
 }
 
-export const db =
-  global.db ||
-  pgp()(
-    "postgres://default:z2lxO9AgmUWd@ep-weathered-disk-18232995-pooler.us-east-1.postgres.vercel-storage.com:5432/verceldb?sslmode=require"
-  )
+export const db = global.db || pgp()(process.env.POSTGRES_URL!)
 
 if (process.env.NODE_ENV !== "production") global.db = db
 
