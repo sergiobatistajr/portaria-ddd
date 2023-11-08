@@ -1,3 +1,12 @@
+import RegisterUserForm from "./Form"
+
 export default function Page() {
-  return <main>Add user page</main>
+  return (
+    <main>
+      <div>
+        <h1 className="text-3xl">Criar usuário</h1>
+        <RegisterUserForm />
+      </div>
+    </main>
+  )
 }

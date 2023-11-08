@@ -2,11 +2,13 @@
 import { z } from "zod"
 import { signIn } from "@/auth"
 import RegisterGuestEntry from "@/core/application/usecase/RegisterGuestEntry"
+import RegisterUser from "@/core/application/usecase/RegisterUser"
 import { auth } from "@/auth"
 import { revalidatePath } from "next/cache"
-import { guestDb } from "./database"
+import { guestDb, userDb } from "./database"
 
 const registerGuestEntry = RegisterGuestEntry.getInstance(guestDb)
+const registerUser = RegisterUser.getInstance(userDb)
 export async function saveEntryGuest(formData: FormData) {
   try {
     const session = await auth()
@@ -79,4 +81,24 @@ export async function authenticate(
   }
 }
 
-export async function createUser(formData: FormData) {}
+export async function createUser(formData: FormData) {
+  try {
+    const parsed = z
+      .object({
+        name: z.string().min(1),
+        email: z.string().email().min(1),
+        password: z.string().min(8),
+      })
+      .safeParse(Object.fromEntries(formData))
+    if (parsed.success) {
+      const { email, name, password } = parsed.data
+      await registerUser.execute({ email, name, password })
+    } else {
+      console.log(parsed.error)
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message)
+    }
+  }
+}

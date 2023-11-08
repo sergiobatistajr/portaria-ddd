@@ -38,7 +38,6 @@ export async function fetchCountGuestsPages(query: string) {
 
 export async function fetchUsersFiltered(query: string, currentPage: number) {
   noStore()
-
   try {
     const users = await findFilteredUsers.execute(query, currentPage)
     return users
