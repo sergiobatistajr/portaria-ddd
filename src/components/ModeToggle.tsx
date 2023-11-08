@@ -15,11 +15,14 @@ export function ModeToggle() {
   const [isMouted, setIsMounted] = useState(false)
   const { setTheme } = useTheme()
 
-  useEffect(function () {
-    if (!isMouted) {
-      setIsMounted(true)
-    }
-  }, [])
+  useEffect(
+    function () {
+      if (!isMouted) {
+        setIsMounted(true)
+      }
+    },
+    [isMouted]
+  )
   if (!isMouted) {
     return null
   }
