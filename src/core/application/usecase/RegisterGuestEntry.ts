@@ -2,7 +2,16 @@ import Guest from "../../domain/entities/Guest"
 import GuestRepository from "../repository/GuestRepository"
 
 export default class RegisterGuestEntry {
-  constructor(readonly guestRepository: GuestRepository) {}
+  private static instance: RegisterGuestEntry
+  private constructor(readonly guestRepository: GuestRepository) {}
+  public static getInstance(
+    guestRepository: GuestRepository
+  ): RegisterGuestEntry {
+    if (!RegisterGuestEntry.instance) {
+      RegisterGuestEntry.instance = new RegisterGuestEntry(guestRepository)
+    }
+    return RegisterGuestEntry.instance
+  }
 
   async execute(input: Input): Promise<Output> {
     const status = "inside"

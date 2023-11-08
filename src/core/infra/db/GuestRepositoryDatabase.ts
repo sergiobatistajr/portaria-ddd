@@ -1,25 +1,32 @@
 import GuestRepository from "@/core/application/repository/GuestRepository"
 import Guest from "../../domain/entities/Guest"
-import pgp from "pg-promise"
+import { IDatabase } from "pg-promise"
 
 export default class GuestRepositoryDatabase implements GuestRepository {
+  private static instance: GuestRepositoryDatabase
+  private constructor(private db: IDatabase<any>) {}
+  public static getInstance(db: IDatabase<any>): GuestRepositoryDatabase {
+    if (!GuestRepositoryDatabase.instance) {
+      GuestRepositoryDatabase.instance = new GuestRepositoryDatabase(db)
+    }
+    return GuestRepositoryDatabase.instance
+  }
   async findGuestsFiltered(
     query: string,
     status: string,
     itemsPerPage: number,
     offset: number
   ): Promise<Guest[]> {
-    const db = pgp()("postgres://admin:admin@localhost:5432/app")
     const selectSQL =
       "select * from portaria.guest where (name ilike $1 or plate ilike $2) and status = $3 limit $4 offset $5"
-    const guests = await db.any(selectSQL, [
+    const guests = await this.db.any(selectSQL, [
       `%${query}%`,
       `%${query}%`,
       status,
       itemsPerPage,
       offset,
     ])
-    await db.$pool.end()
+
     return guests.map((guest) =>
       Guest.create(
         guest.name,
@@ -37,15 +44,13 @@ export default class GuestRepositoryDatabase implements GuestRepository {
     )
   }
   async countGuestsPage(query: string, status: string): Promise<number> {
-    const db = pgp()("postgres://admin:admin@localhost:5432/app")
     const countSQL =
       "select count(*) from portaria.guest where (name ilike $1 or plate ilike $2) and status = $3"
-    const result = await db.one<{ count: number }>(countSQL, [
+    const result = await this.db.one<{ count: number }>(countSQL, [
       `%${query}%`,
       `%${query}%`,
       status,
     ])
-    await db.$pool.end()
 
     return result.count
   }
@@ -57,12 +62,11 @@ export default class GuestRepositoryDatabase implements GuestRepository {
     name: string,
     status: string
   ): Promise<Guest | null> {
-    const db = pgp()("postgres://admin:admin@localhost:5432/app")
-    const guest = await db.oneOrNone(
+    const guest = await this.db.oneOrNone(
       "select * from portaria.guest where name = $1 and status = $2 and plate is null",
       [name, status]
     )
-    await db.$pool.end()
+
     return guest
       ? Guest.create(
           guest.name,
@@ -84,12 +88,11 @@ export default class GuestRepositoryDatabase implements GuestRepository {
     plate: string,
     status: string
   ): Promise<Guest | null> {
-    const db = pgp()("postgres://admin:admin@localhost:5432/app")
-    const guest = await db.oneOrNone(
+    const guest = await this.db.oneOrNone(
       "select * from portaria.guest where plate = $1 and status = $2",
       [plate, status]
     )
-    await db.$pool.end()
+
     return guest
       ? Guest.create(
           guest.name,
@@ -108,7 +111,6 @@ export default class GuestRepositoryDatabase implements GuestRepository {
   }
 
   async save(guest: Guest): Promise<void> {
-    const db = pgp()("postgres://admin:admin@localhost:5432/app")
     const insertSQL = `insert into portaria.guest ( 
     id,
     name,
@@ -134,7 +136,7 @@ export default class GuestRepositoryDatabase implements GuestRepository {
       $10,
       $11
     )`
-    await db.none(insertSQL, [
+    await this.db.none(insertSQL, [
       guest.id,
       guest.name,
       guest.entryDate,
@@ -147,10 +149,8 @@ export default class GuestRepositoryDatabase implements GuestRepository {
       guest.departureDate,
       guest.status,
     ])
-    await db.$pool.end()
   }
   async update(guest: Guest): Promise<void> {
-    const db = pgp()("postgres://admin:admin@localhost:5432/app")
-    await db.$pool.end()
+    return
   }
 }

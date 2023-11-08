@@ -1,14 +1,14 @@
 "use server"
 import { z } from "zod"
 import { signIn } from "@/auth"
-import GuestRepositoryDatabase from "@/core/infra/db/GuestRepositoryDatabase"
 import RegisterGuestEntry from "@/core/application/usecase/RegisterGuestEntry"
 import { auth } from "@/auth"
 import { revalidatePath } from "next/cache"
+import { guestDb } from "./database"
 
+const registerGuestEntry = RegisterGuestEntry.getInstance(guestDb)
 export async function saveEntryGuest(formData: FormData) {
   try {
-    const db = new GuestRepositoryDatabase()
     const session = await auth()
     const parsed = z
       .object({
@@ -20,7 +20,7 @@ export async function saveEntryGuest(formData: FormData) {
       .safeParse(Object.fromEntries(formData))
     if (parsed.success) {
       const { name, entryDate, apartment, observation } = parsed.data
-      await new RegisterGuestEntry(db).execute({
+      await registerGuestEntry.execute({
         name,
         entryDate: new Date(entryDate),
         createdBy: session?.user?.id,
@@ -36,7 +36,6 @@ export async function saveEntryGuest(formData: FormData) {
   }
 }
 export async function saveEntryVehicle(formData: FormData) {
-  const db = new GuestRepositoryDatabase()
   const session = await auth()
   try {
     const newGuest = z
@@ -56,7 +55,8 @@ export async function saveEntryVehicle(formData: FormData) {
         entryDate: new Date(newGuest.data.entryDate),
         createdBy: session?.user?.id as string,
       }
-      await new RegisterGuestEntry(db).execute(input)
+      await registerGuestEntry.execute(input)
+      revalidatePath("/dashboard/exit")
     } else {
       console.log(newGuest.error)
     }
