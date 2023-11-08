@@ -5,8 +5,7 @@ export default async function Page() {
 
   return (
     <div className="min-h-screen">
-      teste
-      {session?.user?.id}
+      Home page
       {session?.user?.email}
       {session?.user?.name}
     </div>
