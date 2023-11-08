@@ -25,6 +25,7 @@ export async function saveEntryGuest(formData: FormData) {
       await registerGuestEntry.execute({
         name,
         entryDate: new Date(entryDate),
+        // @ts-ignore
         createdBy: session?.user?.id,
         apartment,
         observation,
@@ -55,7 +56,8 @@ export async function saveEntryVehicle(formData: FormData) {
       const input = {
         ...newGuest.data,
         entryDate: new Date(newGuest.data.entryDate),
-        createdBy: session?.user?.id as string,
+        // @ts-ignore
+        createdBy: session?.user?.id,
       }
       await registerGuestEntry.execute(input)
       revalidatePath("/dashboard/exit")
