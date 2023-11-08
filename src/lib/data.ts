@@ -15,7 +15,7 @@ export async function fetchGuestFiltered(query: string, currentPage: number) {
   noStore()
   try {
     const guests = await findGuestInsideFiltered.execute(query, currentPage)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    // await new Promise((resolve) => setTimeout(resolve, 2000))
     return guests
   } catch (error) {
     if (error instanceof Error) {

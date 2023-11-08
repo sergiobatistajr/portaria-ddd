@@ -2,8 +2,14 @@ import HashPassword from "../../domain/shared/HashPassword"
 import UserRepository from "../repository/UserRepository"
 
 export default class LoginUser {
-  constructor(readonly userRepository: UserRepository) {}
-
+  private static instance: LoginUser
+  private constructor(readonly userRepository: UserRepository) {}
+  public static getInstance(userRepository: UserRepository): LoginUser {
+    if (!LoginUser.instance) {
+      LoginUser.instance = new LoginUser(userRepository)
+    }
+    return LoginUser.instance
+  }
   async execute(input: Input): Promise<Output> {
     const user = await this.userRepository.findByEmail(input.email)
     if (!user) {

@@ -2,9 +2,10 @@ import NextAuth from "next-auth"
 import { authConfig } from "./auth.config"
 import Credentials from "next-auth/providers/credentials"
 import { z } from "zod"
-import UserRegisterRepositoryDatabase from "./core/infra/db/UserRepositoryDatabase"
 import LoginUser from "./core/application/usecase/LoginUser"
+import { userDb } from "./lib/database"
 
+const loginUser = LoginUser.getInstance(userDb)
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
@@ -15,8 +16,7 @@ export const { auth, signIn, signOut } = NextAuth({
           .safeParse(credentials)
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data
-          const db = new UserRegisterRepositoryDatabase()
-          const user = await new LoginUser(db).execute({ email, password })
+          const user = await loginUser.execute({ email, password })
           return user
         }
         return null
