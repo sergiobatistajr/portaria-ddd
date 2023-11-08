@@ -1,6 +1,7 @@
 import { fetchGuestFiltered } from "@/lib/data"
 import { columns } from "./Columns"
 import { DataTable } from "@/components/DataTable"
+import { formatDateToLocal } from "@/lib/utils"
 
 export default async function ExitDateTable({
   query,
@@ -14,7 +15,7 @@ export default async function ExitDateTable({
     return {
       id: g.id,
       nomeCompleto: g.name,
-      dataEntrada: g.entryDate.toISOString().split("T")[0],
+      dataEntrada: formatDateToLocal(g.entryDate.toISOString()),
       placa: g.plate ?? "-",
       modelo: g.model ?? "-",
       apartamento: g.apartment?.toString() ?? "-",
