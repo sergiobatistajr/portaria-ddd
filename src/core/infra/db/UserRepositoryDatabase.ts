@@ -26,11 +26,11 @@ export default class UserRepositoryDatabase implements UserRepository {
     )
   }
   async countUsersPage(query: string): Promise<number> {
-    const { count } = await this.db.one(
+    const result = await this.db.one<{ count: number }>(
       "select count(*) from portaria.user where email ilike $1",
       [`%${query}%`]
     )
-    return count
+    return result.count
   }
   async findByEmail(email: string): Promise<User | null> {
     const user = await this.db.oneOrNone(

@@ -17,16 +17,16 @@ export function NavLinks() {
       href: "/dashboard/entry/vehicle",
     },
     {
-      title: "Saída",
+      title: "Saídas",
       href: "/dashboard/exit",
     },
     {
-      title: "Notifications",
-      href: "/dashboard/notifications",
+      title: "Usuários",
+      href: "/dashboard/user",
     },
     {
-      title: "Display",
-      href: "/dashboard/display",
+      title: "Relatórios",
+      href: "/dashboard/report",
     },
   ]
   return (

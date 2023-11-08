@@ -8,7 +8,7 @@ declare module "@auth/core" {
   }
 }
 
-export const authConfig: NextAuthConfig = {
+export const authConfig = {
   providers: [],
   pages: {
     signIn: "/login",
@@ -38,4 +38,4 @@ export const authConfig: NextAuthConfig = {
       return true
     },
   },
-}
+} satisfies NextAuthConfig
