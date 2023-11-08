@@ -4,7 +4,14 @@ import HashPassword from "../../domain/shared/HashPassword"
 import StrongPassword from "../../domain/shared/StrongPassword"
 
 export default class RegisterUser {
-  constructor(readonly userRepository: UserRepository) {}
+  private static instance: RegisterUser
+  private constructor(readonly userRepository: UserRepository) {}
+  public static getInstance(userRepository: UserRepository): RegisterUser {
+    if (!RegisterUser.instance) {
+      RegisterUser.instance = new RegisterUser(userRepository)
+    }
+    return RegisterUser.instance
+  }
   async execute(input: Input): Promise<Output> {
     const user = await this.userRepository.findByEmail(input.email)
     if (user) {

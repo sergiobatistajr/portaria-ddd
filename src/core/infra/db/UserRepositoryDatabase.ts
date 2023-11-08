@@ -18,8 +18,8 @@ export default class UserRepositoryDatabase implements UserRepository {
     offset: number
   ): Promise<User[]> {
     const users = await this.db.any(
-      "select * from portaria.user where email ilike $1 limit $2 offset $3",
-      [`%${query}%`, itemsPerPage, offset]
+      "select * from portaria.user where email ilike $1 or name ilike $2 limit $3 offset $4",
+      [`%${query}%`, `%${query}%`, itemsPerPage, offset]
     )
     return users.map((user) =>
       User.create(user.name, user.email, user.password, user.id)
