@@ -1,4 +1,7 @@
 import Guest from "../../domain/entities/Guest"
+export type findAllGuestFilteredOutput = {
+  created_by_name: string
+} & Guest
 
 export default interface GuestRepository {
   findById(id: string): Promise<Guest | null>
@@ -18,7 +21,7 @@ export default interface GuestRepository {
     query: string,
     itemsPerPage: number,
     offset: number
-  ): Promise<Guest[]>
+  ): Promise<findAllGuestFilteredOutput[]>
   countAllGuestFilteredPage(query: string): Promise<number>
   save(guest: Guest): Promise<void>
   update(guest: Guest): Promise<void>

@@ -24,7 +24,7 @@ export default async function AllGuestDataTable({
       apartamento: g.apartment?.toString() ?? "-",
       observacao: g.observation ?? "-",
       passageiros: g.pax?.toString() ?? "-",
-      entradaPor: g.createdBy,
+      entradaPor: g.created_by_name,
     }
   })
 

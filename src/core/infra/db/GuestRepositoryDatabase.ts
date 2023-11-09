@@ -1,4 +1,6 @@
-import GuestRepository from "@/core/application/repository/GuestRepository"
+import GuestRepository, {
+  findAllGuestFilteredOutput,
+} from "@/core/application/repository/GuestRepository"
 import Guest from "../../domain/entities/Guest"
 import { IDatabase } from "pg-promise"
 
@@ -15,9 +17,9 @@ export default class GuestRepositoryDatabase implements GuestRepository {
     query: string,
     itemsPerPage: number,
     offset: number
-  ): Promise<Guest[]> {
+  ): Promise<findAllGuestFilteredOutput[]> {
     const selectSQL =
-      "select * from portaria.guest where name ilike $1 or plate ilike $2 or model ilike $3 or apartment::text ilike $4 or TO_CHAR(entryDate, 'DD/MM/YYYY, HH24:MI') ilike $5 or TO_CHAR(departureDate, 'DD/MM/YYYY, HH24:MI') ilike $6 or observation ilike $7 limit $8 offset $9"
+      "select g.*, u.name as created_by_name from portaria.guest g left join portaria.user u on g.createdBy = u.id where g.name ilike $1 or g.plate ilike $2 or g.model ilike $3 or g.apartment::text ilike $4 or TO_CHAR(g.entryDate, 'DD/MM/YYYY, HH24:MI') ilike $5 or TO_CHAR(g.departureDate, 'DD/MM/YYYY, HH24:MI') ilike $6 or g.observation ilike $7 limit $8 offset $9"
     const guests = await this.db.any(selectSQL, [
       `%${query}%`,
       `%${query}%`,
@@ -29,8 +31,8 @@ export default class GuestRepositoryDatabase implements GuestRepository {
       itemsPerPage,
       offset,
     ])
-    return guests.map((guest) =>
-      Guest.create(
+    return guests.map((guest) => {
+      const createdGuest = Guest.create(
         guest.name,
         guest.entrydate,
         guest.createdby,
@@ -43,7 +45,11 @@ export default class GuestRepositoryDatabase implements GuestRepository {
         guest.departuredate,
         guest.id
       )
-    )
+      return {
+        ...createdGuest,
+        created_by_name: guest.created_by_name,
+      }
+    })
   }
   async countAllGuestFilteredPage(query: string): Promise<number> {
     const countSQL =
