@@ -17,7 +17,7 @@ export default class GuestRepositoryDatabase implements GuestRepository {
     offset: number
   ): Promise<Guest[]> {
     const selectSQL =
-      "select * from portaria.guest where name ilike $1 or plate ilike $2 or model ilike $3 or apartment::text ilike $4 or TO_CHAR(entryDate, 'DD/MM/YYYY') ilike $5 or TO_CHAR(departureDate, 'DD/MM/YYYY') ilike $6 or observation ilike $7 limit $8 offset $9"
+      "select * from portaria.guest where name ilike $1 or plate ilike $2 or model ilike $3 or apartment::text ilike $4 or TO_CHAR(entryDate, 'DD/MM/YYYY, HH24:MI') ilike $5 or TO_CHAR(departureDate, 'DD/MM/YYYY, HH24:MI') ilike $6 or observation ilike $7 limit $8 offset $9"
     const guests = await this.db.any(selectSQL, [
       `%${query}%`,
       `%${query}%`,
@@ -47,7 +47,7 @@ export default class GuestRepositoryDatabase implements GuestRepository {
   }
   async countAllGuestFilteredPage(query: string): Promise<number> {
     const countSQL =
-      "select count(*) from portaria.guest where name ilike $1 or plate ilike $2 or model ilike $3 or apartment::text ilike $4 or TO_CHAR(entryDate, 'DD/MM/YYYY') ilike $5 or TO_CHAR(departureDate, 'DD/MM/YYYY') ilike $6 or observation ilike $7"
+      "select count(*) from portaria.guest where name ilike $1 or plate ilike $2 or model ilike $3 or apartment::text ilike $4 or TO_CHAR(entryDate, 'DD/MM/YYYY, HH24:MI') ilike $5 or TO_CHAR(departureDate, 'DD/MM/YYYY, HH24:MI') ilike $6 or observation ilike $7"
     const result = await this.db.one<{ count: number }>(countSQL, [
       `%${query}%`,
       `%${query}%`,
