@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { saveExitGuest } from "@/lib/actions"
+import { CalendarClock } from "lucide-react"
 
 export default function DialogExitGuest({
   id,
@@ -24,7 +25,10 @@ export default function DialogExitGuest({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Saída</Button>
+        <Button variant="link" className="space-x-1">
+          <CalendarClock />
+          <span>Saída</span>
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form action={saveExitGuest}>
