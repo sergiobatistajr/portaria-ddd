@@ -29,6 +29,7 @@ export function VehicleForm() {
         type="text"
         name="plate"
         placeholder="ABC1D23"
+        onChange={(e) => (e.target.value = e.target.value.toUpperCase())}
         required
       />
       <Label htmlFor="model">Modelo</Label>
