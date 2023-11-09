@@ -1,16 +1,16 @@
 import Guest from "@/core/domain/entities/Guest"
 import GuestRepository from "../repository/GuestRepository"
 
-export default class GetAllGuestFiltered {
-  private static instance: GetAllGuestFiltered
+export default class FindAllGuestFiltered {
+  private static instance: FindAllGuestFiltered
   private constructor(private readonly guestRepository: GuestRepository) {}
   public static getInstance(
     guestRepository: GuestRepository
-  ): GetAllGuestFiltered {
-    if (!GetAllGuestFiltered.instance) {
-      GetAllGuestFiltered.instance = new GetAllGuestFiltered(guestRepository)
+  ): FindAllGuestFiltered {
+    if (!FindAllGuestFiltered.instance) {
+      FindAllGuestFiltered.instance = new FindAllGuestFiltered(guestRepository)
     }
-    return GetAllGuestFiltered.instance
+    return FindAllGuestFiltered.instance
   }
   async execute(query: string, currentPage: number, itemsPerPage: number = 10) {
     const offset = (currentPage - 1) * itemsPerPage

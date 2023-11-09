@@ -1,17 +1,17 @@
 import GuestRepository from "../repository/GuestRepository"
 
-export default class CountAllGuestFiltered {
-  private static instance: CountAllGuestFiltered
+export default class CountAllGuestFilteredPage {
+  private static instance: CountAllGuestFilteredPage
   private constructor(private readonly guestRepository: GuestRepository) {}
   public static getInstance(
     guestRespository: GuestRepository
-  ): CountAllGuestFiltered {
-    if (!CountAllGuestFiltered.instance) {
-      CountAllGuestFiltered.instance = new CountAllGuestFiltered(
+  ): CountAllGuestFilteredPage {
+    if (!CountAllGuestFilteredPage.instance) {
+      CountAllGuestFilteredPage.instance = new CountAllGuestFilteredPage(
         guestRespository
       )
     }
-    return CountAllGuestFiltered.instance
+    return CountAllGuestFilteredPage.instance
   }
 
   async execute(query: string, itemsPerPage: number = 10) {
