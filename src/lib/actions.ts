@@ -3,12 +3,15 @@ import { z } from "zod"
 import { signIn } from "@/auth"
 import RegisterGuestEntry from "@/core/application/usecase/RegisterGuestEntry"
 import RegisterUser from "@/core/application/usecase/RegisterUser"
+import RegisterGuestDeparture from "@/core/application/usecase/RegisterGuestDeparture"
 import { auth } from "@/auth"
 import { revalidatePath } from "next/cache"
 import { guestDb, userDb } from "./database"
+import { redirect } from "next/navigation"
 
-const registerGuestEntry = RegisterGuestEntry.getInstance(guestDb)
 const registerUser = RegisterUser.getInstance(userDb)
+const registerGuestEntry = RegisterGuestEntry.getInstance(guestDb)
+const registerGuestDeparture = RegisterGuestDeparture.getInstance(guestDb)
 export async function saveExitGuest(formData: FormData) {
   try {
     const parsed = z
@@ -19,10 +22,15 @@ export async function saveExitGuest(formData: FormData) {
       .safeParse(Object.fromEntries(formData))
     if (parsed.success) {
       const { id, departureDate } = parsed.data
-      console.log(id, departureDate)
+      await registerGuestDeparture.execute({
+        id,
+        departureDate: new Date(departureDate),
+      })
     } else if (parsed.error) {
       throw new Error(parsed.error.message)
     }
+    revalidatePath("/dashboard/exit")
+    redirect("/dashboard/exit")
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message)

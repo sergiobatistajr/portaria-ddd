@@ -17,7 +17,7 @@ export default class RegisterGuestDeparture {
 
   async execute(input: Input): Promise<Output> {
     let status = "inside"
-    const guest = await this.guestRepository.findByIdAndStatus(input.id, status)
+    const guest = await this.guestRepository.findById(input.id)
     if (!guest) {
       throw new Error("Visitante não existe")
     }

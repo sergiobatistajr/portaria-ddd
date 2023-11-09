@@ -54,8 +54,24 @@ export default class GuestRepositoryDatabase implements GuestRepository {
 
     return result.count
   }
-  findByIdAndStatus(id: string, status: string): Promise<Guest | null> {
-    throw new Error("Method not implemented.")
+  async findById(id: string): Promise<Guest | null> {
+    const selectSQL = "select * from portaria.guest where id = $1"
+    const guest = await this.db.oneOrNone(selectSQL, [id])
+    return guest
+      ? Guest.create(
+          guest.name,
+          guest.entrydate,
+          guest.createdby,
+          guest.plate,
+          guest.model,
+          parseInt(guest.pax),
+          parseInt(guest.apartment),
+          guest.observation,
+          guest.status,
+          guest.departuredate,
+          guest.id
+        )
+      : null
   }
 
   async findByNameAndStatusWithOutPlate(
@@ -151,6 +167,20 @@ export default class GuestRepositoryDatabase implements GuestRepository {
     ])
   }
   async update(guest: Guest): Promise<void> {
-    return
+    const updateSQL =
+      "update portaria.guest set name = $1, entryDate = $2, plate = $3, model = $4, pax = $5, apartment = $6, createdBy = $7, observation = $8, departureDate = $9, status = $10 where id = $11"
+    await this.db.none(updateSQL, [
+      guest.name,
+      guest.entryDate,
+      guest.plate,
+      guest.model,
+      guest.pax,
+      guest.apartment,
+      guest.createdBy,
+      guest.observation,
+      guest.departureDate,
+      guest.status,
+      guest.id,
+    ])
   }
 }

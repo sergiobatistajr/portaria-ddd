@@ -1,7 +1,7 @@
 import Guest from "../../domain/entities/Guest"
 
 export default interface GuestRepository {
-  findByIdAndStatus(id: string, status: string): Promise<Guest | null>
+  findById(id: string): Promise<Guest | null>
   findByNameAndStatusWithOutPlate(
     name: string,
     status: string
