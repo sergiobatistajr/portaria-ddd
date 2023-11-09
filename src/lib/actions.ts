@@ -9,6 +9,26 @@ import { guestDb, userDb } from "./database"
 
 const registerGuestEntry = RegisterGuestEntry.getInstance(guestDb)
 const registerUser = RegisterUser.getInstance(userDb)
+export async function saveExitGuest(formData: FormData) {
+  try {
+    const parsed = z
+      .object({
+        id: z.string().min(1),
+        departureDate: z.string().min(1),
+      })
+      .safeParse(Object.fromEntries(formData))
+    if (parsed.success) {
+      const { id, departureDate } = parsed.data
+      console.log(id, departureDate)
+    } else if (parsed.error) {
+      throw new Error(parsed.error.message)
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message)
+    }
+  }
+}
 export async function saveEntryGuest(formData: FormData) {
   try {
     const session = await auth()

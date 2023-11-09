@@ -1,7 +1,9 @@
 "use client"
 
+import DialogExitGuest from "@/components/DialogExit"
 import { ColumnDef } from "@tanstack/react-table"
 type DTO = {
+  id: string
   nomeCompleto: string
   dataEntrada: string
   placa: string
@@ -29,5 +31,13 @@ export const columns: ColumnDef<DTO>[] = [
   {
     accessorKey: "apartamento",
     header: "Apartamento",
+  },
+  {
+    id: "actions",
+    header: "Saída",
+    cell: ({ row }) => {
+      const { id, nomeCompleto, placa } = row.original
+      return <DialogExitGuest id={id} name={nomeCompleto} plate={placa} />
+    },
   },
 ]
