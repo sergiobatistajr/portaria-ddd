@@ -115,24 +115,25 @@ export async function authenticate(
   }
 }
 
-export async function createUser(formData: FormData) {
+export async function createUser(prevState: any, formData: FormData) {
   try {
     const parsed = z
       .object({
         name: z.string().min(1),
         email: z.string().email().min(1),
         password: z.string().min(8),
+        confirmPassword: z.string().min(8),
       })
       .safeParse(Object.fromEntries(formData))
     if (parsed.success) {
-      const { email, name, password } = parsed.data
-      await registerUser.execute({ email, name, password })
+      const { email, name, password, confirmPassword } = parsed.data
+      await registerUser.execute({ email, name, password, confirmPassword })
     } else {
-      console.log(parsed.error)
+      throw new Error(parsed.error.message)
     }
   } catch (error) {
     if (error instanceof Error) {
-      console.log(error.message)
+      return { message: error.message }
     }
   }
 }
