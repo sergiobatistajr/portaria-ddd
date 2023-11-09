@@ -2,7 +2,18 @@ import Guest from "../../domain/entities/Guest"
 import GuestRepository from "../repository/GuestRepository"
 
 export default class RegisterGuestDeparture {
-  constructor(readonly guestRepository: GuestRepository) {}
+  private static instance: RegisterGuestDeparture
+  private constructor(readonly guestRepository: GuestRepository) {}
+  public static getInstance(
+    guestRepository: GuestRepository
+  ): RegisterGuestDeparture {
+    if (!RegisterGuestDeparture.instance) {
+      RegisterGuestDeparture.instance = new RegisterGuestDeparture(
+        guestRepository
+      )
+    }
+    return RegisterGuestDeparture.instance
+  }
 
   async execute(input: Input): Promise<Output> {
     let status = "inside"
@@ -11,6 +22,9 @@ export default class RegisterGuestDeparture {
       throw new Error("Visitante não existe")
     }
     status = "finished"
+    if (input.departureDate < guest.entryDate) {
+      throw new Error("Data de saída não pode ser menor que a data de entrada!")
+    }
     const updatedGuest = Guest.create(
       guest.name,
       guest.entryDate,
