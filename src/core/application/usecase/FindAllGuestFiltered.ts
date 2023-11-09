@@ -19,6 +19,6 @@ export default class FindAllGuestFiltered {
       itemsPerPage,
       offset
     )
-    return Guest
+    return guests
   }
 }
