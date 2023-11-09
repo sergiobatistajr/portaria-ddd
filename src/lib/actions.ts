@@ -37,7 +37,7 @@ export async function saveExitGuest(formData: FormData) {
     }
   }
 }
-export async function saveEntryGuest(formData: FormData) {
+export async function saveEntryGuest(prevState: any, formData: FormData) {
   try {
     const session = await auth()
     const parsed = z
@@ -58,18 +58,21 @@ export async function saveEntryGuest(formData: FormData) {
         apartment,
         observation,
       })
+    } else {
+      throw new Error(parsed.error.message)
     }
     revalidatePath("/dashboard/exit")
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message)
+      return { message: error.message }
     }
   }
 }
-export async function saveEntryVehicle(formData: FormData) {
+export async function saveEntryVehicle(prevState: any, formData: FormData) {
   const session = await auth()
   try {
-    const newGuest = z
+    const parsed = z
       .object({
         name: z.string().min(1),
         entryDate: z.string().min(1),
@@ -80,21 +83,22 @@ export async function saveEntryVehicle(formData: FormData) {
         apartment: z.coerce.number().optional(),
       })
       .safeParse(Object.fromEntries(formData))
-    if (newGuest.success) {
+    if (parsed.success) {
       const input = {
-        ...newGuest.data,
-        entryDate: new Date(newGuest.data.entryDate),
+        ...parsed.data,
+        entryDate: new Date(parsed.data.entryDate),
         // @ts-ignore
         createdBy: session?.user?.id,
       }
       await registerGuestEntry.execute(input)
       revalidatePath("/dashboard/exit")
     } else {
-      console.log(newGuest.error)
+      throw new Error(parsed.error.message)
     }
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message)
+      return { message: error.message }
     }
   }
 }

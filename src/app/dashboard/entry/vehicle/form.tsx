@@ -2,11 +2,17 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { saveEntryVehicle as action } from "@/lib/actions"
+import { Label } from "@/components/ui/label"
+import { saveEntryVehicle } from "@/lib/actions"
+import { useFormState } from "react-dom"
+const initialState = {
+  message: "",
+}
 export function VehicleForm() {
+  const [state, action] = useFormState(saveEntryVehicle, initialState)
   return (
     <form action={action} className="space-y-4">
-      <label htmlFor="name">Nome completo</label>
+      <Label htmlFor="name">Nome completo</Label>
       <Input
         placeholder="João da Silva"
         id="name"
@@ -15,9 +21,9 @@ export function VehicleForm() {
         type="text"
         required
       />
-      <label htmlFor="entryDate">Data de entrada</label>
+      <Label htmlFor="entryDate">Data de entrada</Label>
       <Input id="entryDate" name="entryDate" type="datetime-local" required />
-      <label htmlFor="plate">Placa do veiculo</label>
+      <Label htmlFor="plate">Placa do veiculo</Label>
       <Input
         id="plate"
         type="text"
@@ -25,7 +31,7 @@ export function VehicleForm() {
         placeholder="ABC1D23"
         required
       />
-      <label htmlFor="model">Modelo</label>
+      <Label htmlFor="model">Modelo</Label>
       <Input
         type="text"
         name="model"
@@ -33,16 +39,16 @@ export function VehicleForm() {
         placeholder="Honda Fit, Gol e Uno"
         required
       />
-      <label htmlFor="pax">Numero de passageiros</label>
+      <Label htmlFor="pax">Numero de passageiros</Label>
       <Input type="number" name="pax" id="pax" defaultValue={1} required />
-      <label htmlFor="observation">Obeservação?</label>
+      <Label htmlFor="observation">Obeservação?</Label>
       <Input
         id="observation"
         name="observation"
         type="text"
         placeholder="Evento, foi ao setor tal"
       />
-      <label htmlFor="apartment">Aparamento?</label>
+      <Label htmlFor="apartment">Aparamento?</Label>
       <Input
         type="number"
         name="apartment"
@@ -51,6 +57,11 @@ export function VehicleForm() {
         max={4000}
         placeholder="3010"
       />
+      {state?.message && (
+        <div>
+          <span className="text-rose-700 text-xl">{state?.message}</span>
+        </div>
+      )}
       <Button type="submit">Salvar entrada</Button>
     </form>
   )

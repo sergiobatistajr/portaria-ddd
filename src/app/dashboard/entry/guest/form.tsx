@@ -2,12 +2,19 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { saveEntryGuest as action } from "@/lib/actions"
+import { Label } from "@/components/ui/label"
+import { saveEntryGuest } from "@/lib/actions"
+import { useFormState } from "react-dom"
+
+const initialState = {
+  message: "",
+}
 
 export function GuestForm() {
+  const [state, formAction] = useFormState(saveEntryGuest, initialState)
   return (
-    <form action={action} className="space-y-4">
-      <label htmlFor="name">Nome completo</label>
+    <form action={formAction} className="space-y-4">
+      <Label htmlFor="name">Nome completo</Label>
       <Input
         placeholder="João da Silva"
         id="name"
@@ -15,16 +22,16 @@ export function GuestForm() {
         type="text"
         required
       />
-      <label htmlFor="entryDate">Data de entrada</label>
+      <Label htmlFor="entryDate">Data de entrada</Label>
       <Input id="entryDate" name="entryDate" type="datetime-local" required />
-      <label htmlFor="observation">Obeservação?</label>
+      <Label htmlFor="observation">Obeservação?</Label>
       <Input
         id="observation"
         name="observation"
         type="text"
         placeholder="Evento, foi ao setor tal"
       />
-      <label htmlFor="apartment">Aparamento?</label>
+      <Label htmlFor="apartment">Aparamento?</Label>
       <Input
         type="number"
         name="apartment"
@@ -33,6 +40,11 @@ export function GuestForm() {
         max={4000}
         placeholder="3010"
       />
+      {state?.message && (
+        <div>
+          <span className="text-rose-700 text-xl">{state?.message}</span>
+        </div>
+      )}
       <Button type="submit">Salvar entrada</Button>
     </form>
   )
