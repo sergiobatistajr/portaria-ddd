@@ -7,13 +7,19 @@ export default interface GuestRepository {
     status: string
   ): Promise<Guest | null>
   findByPlateAndStatus(plate: string, status: string): Promise<Guest | null>
-  findGuestsFiltered(
+  findGuestsFilteredWStatus(
     query: string,
     status: string,
     itemsPerPage: number,
     offset: number
   ): Promise<Guest[]>
-  countGuestsPage(query: string, status: string): Promise<number>
+  countGuestsFilteredWStatusPage(query: string, status: string): Promise<number>
+  findAllGuestFiltered(
+    query: string,
+    itemsPerPage: number,
+    offset: number
+  ): Promise<Guest[]>
+  countAllGuestFilteredPage(query: string): Promise<number>
   save(guest: Guest): Promise<void>
   update(guest: Guest): Promise<void>
 }

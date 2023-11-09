@@ -3,19 +3,22 @@ import FindFilteredUsers from "@/core/application/usecase/FindFilteredUsers"
 import FindUsersPage from "@/core/application/usecase/CountUsersPage"
 import { unstable_noStore as noStore } from "next/cache"
 import FindGuestInsideFiltered from "@/core/application/usecase/FindGuestsInsideFiltered"
-import CountGuestsInsidePage from "@/core/application/usecase/CountGuestsInsidePage"
+import CountGuestsInsideFilteredPage from "@/core/application/usecase/CountGuestsInsideFilteredPage"
 import { guestDb, userDb } from "./database"
 
 const findGuestInsideFiltered = FindGuestInsideFiltered.getInstance(guestDb)
-const countGuestsInsidePage = CountGuestsInsidePage.getInstance(guestDb)
+const countGuestsInsideFilteredPage =
+  CountGuestsInsideFilteredPage.getInstance(guestDb)
 const findFilteredUsers = FindFilteredUsers.getInstance(userDb)
 const findUsersPage = FindUsersPage.getInstance(userDb)
 
-export async function fetchGuestFiltered(query: string, currentPage: number) {
+export async function fetchGuestFilteredInside(
+  query: string,
+  currentPage: number
+) {
   noStore()
   try {
     const guests = await findGuestInsideFiltered.execute(query, currentPage)
-    // await new Promise((resolve) => setTimeout(resolve, 2000))
     return guests
   } catch (error) {
     if (error instanceof Error) {
@@ -24,10 +27,10 @@ export async function fetchGuestFiltered(query: string, currentPage: number) {
   }
 }
 
-export async function fetchCountGuestsPages(query: string) {
+export async function fetchCountGuestsInsideFilteredPages(query: string) {
   noStore()
   try {
-    const totalPages = await countGuestsInsidePage.execute(query)
+    const totalPages = await countGuestsInsideFilteredPage.execute(query)
     return totalPages
   } catch (error) {
     if (error instanceof Error) {

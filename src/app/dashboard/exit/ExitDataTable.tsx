@@ -1,4 +1,4 @@
-import { fetchGuestFiltered } from "@/lib/data"
+import { fetchGuestFilteredInside } from "@/lib/data"
 import { columns } from "./Columns"
 import { DataTable } from "@/components/DataTable"
 import { formatDateToLocal } from "@/lib/utils"
@@ -10,7 +10,7 @@ export default async function ExitDateTable({
   query: string
   currentPage: number
 }) {
-  const data = await fetchGuestFiltered(query, currentPage)
+  const data = await fetchGuestFilteredInside(query, currentPage)
   const guests = data?.map((g) => {
     return {
       id: g.id,

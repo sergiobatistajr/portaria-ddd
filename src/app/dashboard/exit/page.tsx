@@ -1,4 +1,4 @@
-import { fetchCountGuestsPages } from "@/lib/data"
+import { fetchCountGuestsInsideFilteredPages } from "@/lib/data"
 import Pagination from "@/components/Pagination"
 import { Suspense } from "react"
 import ExitDateTable from "./ExitDataTable"
@@ -15,7 +15,7 @@ export default async function Page({
 }) {
   const query = searchParams?.query || ""
   const currentPage = Number(searchParams?.page) || 1
-  const totalPages = (await fetchCountGuestsPages(query)) ?? 1
+  const totalPages = (await fetchCountGuestsInsideFilteredPages(query)) ?? 1
 
   return (
     <main>

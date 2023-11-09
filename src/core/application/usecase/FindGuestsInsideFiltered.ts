@@ -16,7 +16,7 @@ export default class FindGuestInsideFiltered {
   async execute(query: string, currentPage: number, itemsPerPage: number = 10) {
     const status = "inside"
     const offset = (currentPage - 1) * itemsPerPage
-    const guests = await this.guestRepository.findGuestsFiltered(
+    const guests = await this.guestRepository.findGuestsFilteredWStatus(
       query,
       status,
       itemsPerPage,

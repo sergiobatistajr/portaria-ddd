@@ -11,7 +11,55 @@ export default class GuestRepositoryDatabase implements GuestRepository {
     }
     return GuestRepositoryDatabase.instance
   }
-  async findGuestsFiltered(
+  async findAllGuestFiltered(
+    query: string,
+    itemsPerPage: number,
+    offset: number
+  ): Promise<Guest[]> {
+    const selectSQL =
+      "select * from portaria.guest where name ilike $1 or plate ilike $2 or model ilike $3 or apartment::text ilike $4 or entryDate::text ilike $5 or departureDate::text ilike $6 or observation ilike $7 limit $8 offset $9"
+    const guests = await this.db.any(selectSQL, [
+      `%${query}%`,
+      `%${query}%`,
+      `%${query}%`,
+      `%${query}%`,
+      `%${query}%`,
+      `%${query}%`,
+      `%${query}%`,
+      itemsPerPage,
+      offset,
+    ])
+    return guests.map((guest) =>
+      Guest.create(
+        guest.name,
+        guest.entrydate,
+        guest.createdby,
+        guest.plate,
+        guest.model,
+        parseInt(guest.pax),
+        parseInt(guest.apartment),
+        guest.observation,
+        guest.status,
+        guest.departuredate,
+        guest.id
+      )
+    )
+  }
+  async countAllGuestFilteredPage(query: string): Promise<number> {
+    const countSQL =
+      "select count(*) from portaria.guest where name ilike $1 or plate ilike $2 or model ilike $3 or apartment::text ilike $4 or entryDate::text ilike $5 or departureDate::text ilike $6 or observation ilike $7"
+    const result = await this.db.one<{ count: number }>(countSQL, [
+      `%${query}%`,
+      `%${query}%`,
+      `%${query}%`,
+      `%${query}%`,
+      `%${query}%`,
+      `%${query}%`,
+      `%${query}%`,
+    ])
+    return result.count
+  }
+  async findGuestsFilteredWStatus(
     query: string,
     status: string,
     itemsPerPage: number,
@@ -43,7 +91,10 @@ export default class GuestRepositoryDatabase implements GuestRepository {
       )
     )
   }
-  async countGuestsPage(query: string, status: string): Promise<number> {
+  async countGuestsFilteredWStatusPage(
+    query: string,
+    status: string
+  ): Promise<number> {
     const countSQL =
       "select count(*) from portaria.guest where (name ilike $1 or plate ilike $2) and status = $3"
     const result = await this.db.one<{ count: number }>(countSQL, [
