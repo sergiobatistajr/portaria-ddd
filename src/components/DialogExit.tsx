@@ -17,9 +17,11 @@ export default function DialogExitGuest({
   id,
   name,
   plate,
+  entryDate,
 }: {
   id: string
   name: string
+  entryDate: string
   plate?: string
 }) {
   return (
@@ -57,7 +59,7 @@ export default function DialogExitGuest({
                 disabled
               />
             </div>
-            {plate && (
+            {plate && plate !== "-" && (
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="plate" className="text-right">
                   Placa
@@ -71,6 +73,19 @@ export default function DialogExitGuest({
                 />
               </div>
             )}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="entryDate" className="text-right">
+                Data de Entrada
+              </Label>
+              <Input
+                id="entryDate"
+                name="entryDate"
+                className="col-span-3"
+                type="text"
+                defaultValue={entryDate}
+                disabled
+              />
+            </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="departureDate" className="text-right">
                 Data de Saída
