@@ -54,17 +54,10 @@ export const columns: ColumnDef<DTO>[] = [
   },
   {
     id: "actions",
-    header: "Saída",
+    header: "Corrigir",
     cell: ({ row }) => {
       const { id, nomeCompleto, placa, dataEntrada } = row.original
-      return (
-        <DialogExitGuest
-          id={id}
-          name={nomeCompleto}
-          plate={placa}
-          entryDate={dataEntrada}
-        />
-      )
+      return <div>Falta</div>
     },
   },
 ]
