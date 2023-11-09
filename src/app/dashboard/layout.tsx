@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <aside className="-mx-4 lg:w-1/6">
           <SideNav />
         </aside>
-        <div className="flex-1 lg:max-w-2xl">{children}</div>
+        <div className="flex-1 lg:max-w-2xl xl:max-w-6xl">{children}</div>
       </div>
     </div>
   )
