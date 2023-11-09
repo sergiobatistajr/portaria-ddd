@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
-import { UserPlus, UserMinus, Gauge, UserCog, Table2 } from "lucide-react"
+import { UserPlus, UserMinus, Gauge, Cog, Table2 } from "lucide-react"
 
 export function NavLinks() {
   const pathname = usePathname()
@@ -25,14 +25,14 @@ export function NavLinks() {
       icon: UserMinus,
     },
     {
-      title: "Usuários",
-      href: "/dashboard/user",
-      icon: UserCog,
-    },
-    {
       title: "Relatórios",
       href: "/dashboard/report",
       icon: Table2,
+    },
+    {
+      title: "Usuários",
+      href: "/dashboard/user",
+      icon: Cog,
     },
   ]
   return (
