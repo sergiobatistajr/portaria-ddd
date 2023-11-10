@@ -34,7 +34,7 @@ export default class UserRepositoryDatabase implements UserRepository {
   }
   async countUsersPage(query: string): Promise<number> {
     const result = await this.db.one<{ count: number }>(
-      "select count(*) from portaria.user email ilike $1 or name ilike $2",
+      "select count(*) from portaria.user where email ilike $1 or name ilike $2",
       [`%${query}%`, `%${query}%`]
     )
     return result.count
