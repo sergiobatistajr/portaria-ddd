@@ -1,9 +1,15 @@
-import type { DefaultSession, NextAuthConfig } from "next-auth"
+import type { NextAuthConfig } from "next-auth"
 
-declare module "@auth/core" {
+declare module "@auth/core/types" {
+  interface User {
+    role?: string
+    status?: string
+  }
   interface Session {
     user: {
       id?: string
+      role?: string
+      status?: string
     } & DefaultSession["user"]
   }
 }
@@ -16,7 +22,7 @@ export const authConfig = {
   callbacks: {
     jwt({ token, user }) {
       if (user) {
-        return { ...token, id: user.id, ole: user.role, status: user.status }
+        return { ...token, id: user.id, role: user.role, status: user.status }
       }
       return token
     },
