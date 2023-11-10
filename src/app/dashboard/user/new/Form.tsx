@@ -27,6 +27,15 @@ export default function RegisterUserForm() {
         placeholder="joao.silva@exemplo.com"
         required
       />
+      <Label htmlFor="role">Função</Label>
+      <Input
+        id="role"
+        name="role"
+        type="text"
+        placeholder="Administrador"
+        defaultValue={"admin"}
+        required
+      />
       <Label htmlFor="password">Senha</Label>
       <Input
         id="password"
