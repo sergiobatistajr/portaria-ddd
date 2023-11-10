@@ -6,6 +6,7 @@ type DTO = {
   nomeCompleto: string
   email: string
   ativo: string
+  funcao: string
 }
 
 export const columns: ColumnDef<DTO>[] = [
@@ -17,6 +18,11 @@ export const columns: ColumnDef<DTO>[] = [
     accessorKey: "email",
     header: "Email",
   },
+  {
+    accessorKey: "funcao",
+    header: "Função",
+  },
+
   {
     accessorKey: "ativo",
     header: "Ativo?",
