@@ -119,12 +119,20 @@ export async function createUser(prevState: any, formData: FormData) {
       email: z.string().email().min(1),
       password: z.string().min(8),
       confirmPassword: z.string().min(8),
+      role: z.string().min(1),
     })
     .safeParse(Object.fromEntries(formData))
   if (validatedFields.success) {
-    const { email, name, password, confirmPassword } = validatedFields.data
+    const { email, name, password, confirmPassword, role } =
+      validatedFields.data
     try {
-      await registerUser.execute({ email, name, password, confirmPassword })
+      await registerUser.execute({
+        email,
+        name,
+        password,
+        confirmPassword,
+        role,
+      })
     } catch (error) {
       if (error instanceof Error) {
         return { message: error.message }
