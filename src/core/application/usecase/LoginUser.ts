@@ -23,6 +23,8 @@ export default class LoginUser {
       id: user.id,
       email: user.email,
       name: user.name,
+      role: user.role,
+      status: user.status,
     }
   }
 }
@@ -35,4 +37,6 @@ type Output = {
   id: string
   email: string
   name: string
+  role: string
+  status: string
 }
