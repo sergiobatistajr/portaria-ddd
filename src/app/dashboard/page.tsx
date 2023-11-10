@@ -8,6 +8,8 @@ export default async function Page() {
       Home page
       {session?.user?.email}
       {session?.user?.name}
+      {session?.user?.role}
+      {session?.user?.status}
     </div>
   )
 }
