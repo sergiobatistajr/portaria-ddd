@@ -3,6 +3,8 @@ create table portaria.user (
     id uuid,
     name text,
     email text,
+    status text,
+    role text,
     password text
 )
 create table portaria.guest (
