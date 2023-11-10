@@ -12,10 +12,7 @@ import { redirect } from "next/navigation"
 const registerUser = RegisterUser.getInstance(userDb)
 const registerGuestEntry = RegisterGuestEntry.getInstance(guestDb)
 const registerGuestDeparture = RegisterGuestDeparture.getInstance(guestDb)
-const session = await auth()
-if (!session?.user) {
-  redirect("/login")
-}
+
 export async function saveExitGuest(prevState: any, formData: FormData) {
   const validatedFields = z
     .object({
@@ -41,6 +38,10 @@ export async function saveExitGuest(prevState: any, formData: FormData) {
   revalidatePath("/dashboard/exit")
 }
 export async function saveEntryGuest(prevState: any, formData: FormData) {
+  const session = await auth()
+  if (!session?.user) {
+    redirect("/login")
+  }
   const validatedFields = z
     .object({
       name: z.string().min(1),
@@ -71,6 +72,10 @@ export async function saveEntryGuest(prevState: any, formData: FormData) {
   revalidatePath("/dashboard/exit")
 }
 export async function saveEntryVehicle(prevState: any, formData: FormData) {
+  const session = await auth()
+  if (!session?.user) {
+    redirect("/login")
+  }
   const validatedFields = z
     .object({
       name: z.string().min(1),
