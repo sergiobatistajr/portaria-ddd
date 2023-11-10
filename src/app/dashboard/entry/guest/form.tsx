@@ -6,12 +6,8 @@ import { Label } from "@/components/ui/label"
 import { saveEntryGuest } from "@/lib/actions"
 import { useFormState } from "react-dom"
 
-const initialState = {
-  message: "",
-}
-
 export function GuestForm() {
-  const [state, formAction] = useFormState(saveEntryGuest, initialState)
+  const [state, formAction] = useFormState(saveEntryGuest, undefined)
   return (
     <form action={formAction} className="space-y-4">
       <Label htmlFor="name">Nome completo</Label>

@@ -13,9 +13,7 @@ import { Label } from "@/components/ui/label"
 import { saveExitGuest } from "@/lib/actions"
 import { CalendarClock } from "lucide-react"
 import { useFormState } from "react-dom"
-const initialState = {
-  message: "",
-}
+
 export default function DialogExitGuest({
   id,
   name,
@@ -27,7 +25,7 @@ export default function DialogExitGuest({
   entryDate: string
   plate?: string
 }) {
-  const [state, formAction] = useFormState(saveExitGuest, initialState)
+  const [state, formAction] = useFormState(saveExitGuest, undefined)
   return (
     <Dialog>
       <DialogTrigger asChild>

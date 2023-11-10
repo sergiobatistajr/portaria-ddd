@@ -5,11 +5,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { createUser } from "@/lib/actions"
 import { useFormState } from "react-dom"
-const initialState = {
-  message: "",
-}
+
 export default function RegisterUserForm() {
-  const [state, action] = useFormState(createUser, initialState)
+  const [state, action] = useFormState(createUser, undefined)
+
   return (
     <form action={action} className="space-y-4">
       <Label htmlFor="name">Nome completo</Label>
