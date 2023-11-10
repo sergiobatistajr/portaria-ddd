@@ -19,7 +19,7 @@ export default class GuestRepositoryDatabase implements GuestRepository {
     offset: number
   ): Promise<findAllGuestFilteredOutput[]> {
     const selectSQL =
-      "select g.*, u.name as created_by_name from portaria.guest g left join portaria.user u on g.createdBy = u.id where g.name ilike $1 or g.plate ilike $2 or g.model ilike $3 or g.apartment::text ilike $4 or TO_CHAR(g.entryDate, 'DD/MM/YYYY, HH24:MI') ilike $5 or TO_CHAR(g.departureDate, 'DD/MM/YYYY, HH24:MI') ilike $6 or g.observation ilike $7 limit $8 offset $9"
+      "select g.*, u.name as created_by_name from portaria.guest g left join portaria.user u on g.createdBy = u.id where g.name ilike $1 or g.plate ilike $2 or g.model ilike $3 or g.apartment::text ilike $4 or TO_CHAR(g.entryDate, 'DD/MM/YYYY, HH24:MI') ilike $5 or TO_CHAR(g.departureDate, 'DD/MM/YYYY, HH24:MI') ilike $6 or g.observation ilike $7 order by g.entryDate desc limit $8 offset $9"
     const guests = await this.db.any(selectSQL, [
       `%${query}%`,
       `%${query}%`,
@@ -72,7 +72,7 @@ export default class GuestRepositoryDatabase implements GuestRepository {
     offset: number
   ): Promise<Guest[]> {
     const selectSQL =
-      "select * from portaria.guest where (name ilike $1 or plate ilike $2) and status = $3 limit $4 offset $5"
+      "select * from portaria.guest where (name ilike $1 or plate ilike $2) and status = $3 order by entryDate desc limit $4 offset $5"
     const guests = await this.db.any(selectSQL, [
       `%${query}%`,
       `%${query}%`,
