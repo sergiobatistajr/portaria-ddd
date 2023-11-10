@@ -7,12 +7,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useFormState } from "react-dom"
 import { authenticate } from "@/lib/actions"
-
+import { useRouter } from "next/navigation"
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [code, action] = useFormState(authenticate, undefined)
-
+  const router = useRouter()
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form action={action}>
@@ -45,7 +45,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect="off"
             />
           </div>
-          <Button type="submit">Faça login com e-mail e senha</Button>
+          <Button
+            onClick={() => setTimeout(() => router.refresh(), 200)}
+            type="submit"
+          >
+            Faça login com e-mail e senha
+          </Button>
           {code === "Credenciais inválidas" && (
             <div className="flex space-x-1">
               <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
