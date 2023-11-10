@@ -16,14 +16,19 @@ export const authConfig = {
   callbacks: {
     jwt({ token, user }) {
       if (user) {
-        return { ...token, id: user.id }
+        return { ...token, id: user.id, ole: user.role, status: user.status }
       }
       return token
     },
     session({ session, token }) {
       return {
         ...session,
-        user: { ...session.user, id: token.id },
+        user: {
+          ...session.user,
+          id: token.id,
+          role: token.role,
+          status: token.status,
+        },
       }
     },
     authorized({ auth, request: { nextUrl } }) {
