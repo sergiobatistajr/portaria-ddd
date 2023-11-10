@@ -14,7 +14,8 @@ export default async function UsersDataTable({
     return {
       nomeCompleto: u.name,
       email: u.email,
-      ativo: "Ativo",
+      ativo: u.status,
+      funcao: u.role,
     }
   })
 
