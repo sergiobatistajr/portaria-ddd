@@ -12,6 +12,10 @@ import { redirect } from "next/navigation"
 const registerUser = RegisterUser.getInstance(userDb)
 const registerGuestEntry = RegisterGuestEntry.getInstance(guestDb)
 const registerGuestDeparture = RegisterGuestDeparture.getInstance(guestDb)
+const session = await auth()
+if (!session?.user) {
+  redirect("/login")
+}
 export async function saveExitGuest(prevState: any, formData: FormData) {
   const validatedFields = z
     .object({
@@ -37,7 +41,6 @@ export async function saveExitGuest(prevState: any, formData: FormData) {
   revalidatePath("/dashboard/exit")
 }
 export async function saveEntryGuest(prevState: any, formData: FormData) {
-  const session = await auth()
   const validatedFields = z
     .object({
       name: z.string().min(1),
@@ -48,27 +51,26 @@ export async function saveEntryGuest(prevState: any, formData: FormData) {
     .safeParse(Object.fromEntries(formData))
   if (validatedFields.success) {
     const { name, entryDate, apartment, observation } = validatedFields.data
-    try {
-      await registerGuestEntry.execute({
-        name,
-        entryDate: new Date(entryDate),
-        // @ts-ignore
-        createdBy: session?.user?.id,
-        apartment,
-        observation,
-      })
-    } catch (error) {
-      if (error instanceof Error) {
-        return { message: error.message }
+    if (session?.user.id)
+      try {
+        await registerGuestEntry.execute({
+          name,
+          entryDate: new Date(entryDate),
+          createdBy: session?.user?.id,
+          apartment,
+          observation,
+        })
+      } catch (error) {
+        if (error instanceof Error) {
+          return { message: error.message }
+        }
       }
-    }
   } else if (validatedFields.error) {
     return { message: validatedFields.error.message }
   }
   revalidatePath("/dashboard/exit")
 }
 export async function saveEntryVehicle(prevState: any, formData: FormData) {
-  const session = await auth()
   const validatedFields = z
     .object({
       name: z.string().min(1),
@@ -81,17 +83,18 @@ export async function saveEntryVehicle(prevState: any, formData: FormData) {
     })
     .safeParse(Object.fromEntries(formData))
   if (validatedFields.success) {
-    const input = {
-      ...validatedFields.data,
-      entryDate: new Date(validatedFields.data.entryDate),
-      // @ts-ignore
-      createdBy: session?.user?.id,
-    }
-    try {
-      await registerGuestEntry.execute(input)
-    } catch (error) {
-      if (error instanceof Error) {
-        return { message: error.message }
+    if (session?.user.id) {
+      const input = {
+        ...validatedFields.data,
+        entryDate: new Date(validatedFields.data.entryDate),
+        createdBy: session?.user?.id,
+      }
+      try {
+        await registerGuestEntry.execute(input)
+      } catch (error) {
+        if (error instanceof Error) {
+          return { message: error.message }
+        }
       }
     }
   } else if (validatedFields.error) {
