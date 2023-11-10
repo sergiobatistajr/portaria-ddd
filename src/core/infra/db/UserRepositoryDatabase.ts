@@ -22,13 +22,20 @@ export default class UserRepositoryDatabase implements UserRepository {
       [`%${query}%`, `%${query}%`, itemsPerPage, offset]
     )
     return users.map((user) =>
-      User.create(user.name, user.email, user.password, user.id)
+      User.create(
+        user.name,
+        user.email,
+        user.password,
+        user.role,
+        user.status,
+        user.id
+      )
     )
   }
   async countUsersPage(query: string): Promise<number> {
     const result = await this.db.one<{ count: number }>(
-      "select count(*) from portaria.user where email ilike $1",
-      [`%${query}%`]
+      "select count(*) from portaria.user email ilike $1 or name ilike $2",
+      [`%${query}%`, `%${query}%`]
     )
     return result.count
   }
@@ -38,14 +45,21 @@ export default class UserRepositoryDatabase implements UserRepository {
       [email]
     )
     return user
-      ? User.create(user.name, user.email, user.password, user.id)
+      ? User.create(
+          user.name,
+          user.email,
+          user.password,
+          user.role,
+          user.status,
+          user.id
+        )
       : null
   }
 
   async save(user: User): Promise<void> {
     await this.db.none(
-      "insert into portaria.user (id, name, email, password) values ($1, $2, $3, $4)",
-      [user.id, user.name, user.email, user.password]
+      "insert into portaria.user (id, name, email, password, role, status ) values ($1, $2, $3, $4, $5, $6)",
+      [user.id, user.name, user.email, user.password, user.role, user.status]
     )
   }
   async delete(id: string): Promise<void> {
