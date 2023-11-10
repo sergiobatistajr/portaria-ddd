@@ -26,11 +26,11 @@ export async function saveExitGuest(prevState: any, formData: FormData) {
         id,
         departureDate: new Date(departureDate),
       })
-    } else {
+    } else if (parsed.error) {
       throw new Error(parsed.error.message)
     }
     revalidatePath("/dashboard/exit")
-    redirect("/dashboard/exit")
+    redirect("/dashboard")
   } catch (error) {
     if (error instanceof Error) {
       return { message: error.message }
@@ -131,6 +131,8 @@ export async function createUser(prevState: any, formData: FormData) {
     } else {
       throw new Error(parsed.error.message)
     }
+    revalidatePath("/dashboard/user")
+    redirect("/dashboard")
   } catch (error) {
     if (error instanceof Error) {
       return { message: error.message }
