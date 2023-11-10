@@ -12,7 +12,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { saveExitGuest } from "@/lib/actions"
 import { CalendarClock } from "lucide-react"
-
+import { useFormState } from "react-dom"
+const initialState = {
+  message: "",
+}
 export default function DialogExitGuest({
   id,
   name,
@@ -24,6 +27,7 @@ export default function DialogExitGuest({
   entryDate: string
   plate?: string
 }) {
+  const [state, formAction] = useFormState(saveExitGuest, initialState)
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -33,7 +37,7 @@ export default function DialogExitGuest({
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <form action={saveExitGuest}>
+        <form action={formAction}>
           <DialogHeader>
             <DialogTitle>Lançar saída</DialogTitle>
             <DialogDescription>
@@ -99,6 +103,11 @@ export default function DialogExitGuest({
             </div>
           </div>
           <DialogFooter>
+            {state?.message && (
+              <div>
+                <span className="text-rose-700 text-xl">{state?.message}</span>
+              </div>
+            )}
             <Button type="submit">Salvar saída</Button>
           </DialogFooter>
         </form>

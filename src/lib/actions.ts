@@ -12,7 +12,7 @@ import { redirect } from "next/navigation"
 const registerUser = RegisterUser.getInstance(userDb)
 const registerGuestEntry = RegisterGuestEntry.getInstance(guestDb)
 const registerGuestDeparture = RegisterGuestDeparture.getInstance(guestDb)
-export async function saveExitGuest(formData: FormData) {
+export async function saveExitGuest(prevState: any, formData: FormData) {
   try {
     const parsed = z
       .object({
@@ -26,14 +26,14 @@ export async function saveExitGuest(formData: FormData) {
         id,
         departureDate: new Date(departureDate),
       })
-    } else if (parsed.error) {
+    } else {
       throw new Error(parsed.error.message)
     }
     revalidatePath("/dashboard/exit")
     redirect("/dashboard/exit")
   } catch (error) {
     if (error instanceof Error) {
-      console.log(error.message)
+      return { message: error.message }
     }
   }
 }
