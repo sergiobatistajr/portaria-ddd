@@ -13,6 +13,7 @@ export default class RegisterUser {
     return RegisterUser.instance
   }
   async execute(input: Input): Promise<Output> {
+    const status = "active"
     const password = StrongPassword.validate(input.password)
     const confirmPassword = StrongPassword.validate(input.confirmPassword)
     const user = await this.userRepository.findByEmail(input.email)
@@ -21,7 +22,9 @@ export default class RegisterUser {
     }
     if (password === confirmPassword) {
       const hash = HashPassword.hash(password)
-      await this.userRepository.save(User.create(input.name, input.email, hash))
+      await this.userRepository.save(
+        User.create(input.name, input.email, hash, input.role, status)
+      )
     }
   }
 }
@@ -29,6 +32,7 @@ export default class RegisterUser {
 type Input = {
   name: string
   email: string
+  role: string
   password: string
   confirmPassword: string
 }
