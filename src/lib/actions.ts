@@ -134,5 +134,5 @@ export async function createUser(prevState: any, formData: FormData) {
     return { message: validatedFields.error.message }
   }
   revalidatePath("/dashboard/user")
-  redirect("/dashboard")
+  redirect("/dashboard/user")
 }
