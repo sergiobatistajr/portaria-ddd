@@ -3,9 +3,31 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { createUser } from "@/lib/actions"
 import { useFormState } from "react-dom"
 
+type Roles = { role: string; placeHolder: string }[]
+const roles: Roles = [
+  {
+    role: "admin",
+    placeHolder: "Administrador",
+  },
+  {
+    role: "user",
+    placeHolder: "Porteiro",
+  },
+  {
+    role: "report",
+    placeHolder: "Relatórios",
+  },
+]
 export default function RegisterUserForm() {
   const [state, action] = useFormState(createUser, undefined)
 
@@ -28,14 +50,16 @@ export default function RegisterUserForm() {
         required
       />
       <Label htmlFor="role">Função</Label>
-      <Input
-        id="role"
-        name="role"
-        type="text"
-        placeholder="Administrador"
-        defaultValue={"admin"}
-        required
-      />
+      <Select name="role">
+        <SelectTrigger>
+          <SelectValue id="role" placeholder="Selecione a função" />
+        </SelectTrigger>
+        <SelectContent>
+          {roles.map((r) => (
+            <SelectItem value={r.role}>{r.placeHolder}</SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       <Label htmlFor="password">Senha</Label>
       <Input
         id="password"
