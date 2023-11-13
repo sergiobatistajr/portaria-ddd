@@ -11,17 +11,24 @@ export default class User {
     readonly email: string,
     readonly role: string,
     readonly status: string,
-    readonly password: string
+    readonly password?: string
   ) {}
 
-  static create(
-    name: string,
-    email: string,
-    password: string,
-    role: string,
-    status: string,
+  static create({
+    id,
+    name,
+    email,
+    password,
+    role,
+    status,
+  }: {
     id?: string
-  ) {
+    name: string
+    email: string
+    password?: string
+    role: string
+    status: string
+  }) {
     const _id = id ? id : Id.generate()
     const _name = NameLastName.validade(name)
     const _email = Email.validade(email)
