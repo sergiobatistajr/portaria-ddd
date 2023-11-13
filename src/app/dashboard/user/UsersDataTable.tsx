@@ -1,6 +1,7 @@
 import { fetchUsersFiltered } from "@/lib/data"
-import { columns } from "./Columns"
+import { userColumns, adminColumns } from "./Columns"
 import { DataTable } from "@/components/DataTable"
+import { auth } from "@/auth"
 
 export default async function UsersDataTable({
   query,
@@ -9,6 +10,11 @@ export default async function UsersDataTable({
   query: string
   currentPage: number
 }) {
+  // verificando se o usuario é administrador para permitir editar usuario
+  const session = await auth()
+  let columns = userColumns
+  if (session?.user.role === "admin") columns = adminColumns
+
   const data = await fetchUsersFiltered(query, currentPage)
   const users = data?.map((u) => {
     let status: "Ativo" | "Desativado" = "Desativado"
@@ -19,6 +25,7 @@ export default async function UsersDataTable({
     if (u.role === "user") role = "Porteiro"
     if (u.role === "report") role = "Relatório"
     return {
+      id: u.id,
       nomeCompleto: u.name,
       ativo: status,
       email: u.email,
