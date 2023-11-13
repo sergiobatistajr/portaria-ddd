@@ -15,7 +15,7 @@ export default class LoginUser {
     if (!user) {
       throw new Error("Usuário não registrado")
     }
-    const isValid = HashPassword.verify(input.password, user.password)
+    const isValid = HashPassword.verify(input.password, user.password!)
     if (!isValid) {
       throw new Error("Senha inválida")
     }
