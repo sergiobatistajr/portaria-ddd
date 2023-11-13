@@ -44,7 +44,7 @@ export default function UserActions({ id }: { id: string }) {
         {items.map((i) => {
           const ItemIcon = i.icon
           return (
-            <DropdownMenuItem>
+            <DropdownMenuItem key={i.href}>
               <Link href={i.href} className="flex space-x-1">
                 <ItemIcon className="w-4" />
                 <p>{i.title}</p>
