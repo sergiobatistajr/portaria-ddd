@@ -23,7 +23,13 @@ export default class RegisterUser {
     if (password === confirmPassword) {
       const hash = HashPassword.hash(password)
       await this.userRepository.save(
-        User.create(input.name, input.email, hash, input.role, status)
+        User.create({
+          name: input.name,
+          email: input.email,
+          password: hash,
+          role: input.role,
+          status,
+        })
       )
     }
   }
