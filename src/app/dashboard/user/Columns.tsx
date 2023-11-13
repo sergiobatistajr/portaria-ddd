@@ -1,14 +1,42 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
+import UserActions from "./UserActions"
 type DTO = {
+  id: string
   nomeCompleto: string
   email: string
   ativo: string
   funcao: string
 }
 
-export const columns: ColumnDef<DTO>[] = [
+export const adminColumns: ColumnDef<DTO>[] = [
+  {
+    accessorKey: "nomeCompleto",
+    header: "Nome completo",
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+  },
+  {
+    accessorKey: "funcao",
+    header: "Função",
+  },
+
+  {
+    accessorKey: "ativo",
+    header: "Ativo?",
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const { id } = row.original
+      return <UserActions id={id} />
+    },
+  },
+]
+export const userColumns: ColumnDef<DTO>[] = [
   {
     accessorKey: "nomeCompleto",
     header: "Nome completo",
