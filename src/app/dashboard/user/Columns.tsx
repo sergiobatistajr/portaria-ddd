@@ -1,6 +1,5 @@
 "use client"
 
-import Guest from "@/core/domain/entities/Guest"
 import { ColumnDef } from "@tanstack/react-table"
 type DTO = {
   nomeCompleto: string
