@@ -4,37 +4,87 @@ import { usePathname } from "next/navigation"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
-import { UserPlus, UserMinus, Gauge, Cog, Table2 } from "lucide-react"
-
-export function NavLinks() {
+import {
+  UserPlus,
+  UserMinus,
+  Gauge,
+  Cog,
+  Table2,
+  type LucideIcon,
+} from "lucide-react"
+type NavLinksProps = {
+  [key: string]: {
+    title: string
+    href: string
+    icon: LucideIcon
+  }[]
+}
+export function NavLinks({ role }: { role: string }) {
   const pathname = usePathname()
-  const items = [
-    {
-      title: "Painel",
-      href: "/dashboard",
-      icon: Gauge,
-    },
-    {
-      title: "Entrada",
-      href: "/dashboard/entry/vehicle",
-      icon: UserPlus,
-    },
-    {
-      title: "Saídas",
-      href: "/dashboard/exit",
-      icon: UserMinus,
-    },
-    {
-      title: "Relatórios",
-      href: "/dashboard/report",
-      icon: Table2,
-    },
-    {
-      title: "Usuários",
-      href: "/dashboard/user",
-      icon: Cog,
-    },
-  ]
+  const navLinks: NavLinksProps = {
+    report: [
+      {
+        title: "Painel",
+        href: "/dashboard",
+        icon: Gauge,
+      },
+      {
+        title: "Relatórios",
+        href: "/dashboard/report",
+        icon: Table2,
+      },
+    ],
+    user: [
+      {
+        title: "Painel",
+        href: "/dashboard",
+        icon: Gauge,
+      },
+      {
+        title: "Relatórios",
+        href: "/dashboard/report",
+        icon: Table2,
+      },
+      {
+        title: "Entrada",
+        href: "/dashboard/entry/vehicle",
+        icon: UserPlus,
+      },
+      {
+        title: "Saídas",
+        href: "/dashboard/exit",
+        icon: UserMinus,
+      },
+    ],
+    admin: [
+      {
+        title: "Painel",
+        href: "/dashboard",
+        icon: Gauge,
+      },
+      {
+        title: "Entrada",
+        href: "/dashboard/entry/vehicle",
+        icon: UserPlus,
+      },
+      {
+        title: "Saídas",
+        href: "/dashboard/exit",
+        icon: UserMinus,
+      },
+      {
+        title: "Relatórios",
+        href: "/dashboard/report",
+        icon: Table2,
+      },
+      {
+        title: "Usuários",
+        href: "/dashboard/user",
+        icon: Cog,
+      },
+    ],
+  }
+  const items = navLinks[role]
   return (
     <nav className="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
       {items.map((item) => {
