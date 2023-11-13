@@ -9,12 +9,36 @@ import { auth } from "@/auth"
 import { revalidatePath } from "next/cache"
 import { guestDb, userDb } from "./database"
 import { redirect } from "next/navigation"
+import ResetPassword from "@/core/application/usecase/ResetPassword"
 
 const registerUser = RegisterUser.getInstance(userDb)
 const registerGuestEntry = RegisterGuestEntry.getInstance(guestDb)
 const registerGuestDeparture = RegisterGuestDeparture.getInstance(guestDb)
 const updateuser = UpdateUser.getInstance(userDb)
-
+const resetPasswordUser = ResetPassword.getInstance(userDb)
+export async function resetPassword(prevState: any, formData: FormData) {
+  const validatedFields = z
+    .object({
+      id: z.string().min(1),
+      password: z.string().min(8),
+      confirmPassword: z.string().min(8),
+    })
+    .safeParse(Object.fromEntries(formData))
+  if (validatedFields.success) {
+    const { id, confirmPassword, password } = validatedFields.data
+    try {
+      await resetPasswordUser.execute({ id, confirmPassword, password })
+    } catch (error) {
+      if (error instanceof Error) {
+        return { message: error.message }
+      }
+    }
+  } else if (validatedFields.error) {
+    return { message: validatedFields.error.message }
+  }
+  revalidatePath("/dashboard/user")
+  redirect("/dashboard/user")
+}
 export async function updateUser(prevState: any, formData: FormData) {
   const validatedFields = z
     .object({
@@ -40,8 +64,6 @@ export async function updateUser(prevState: any, formData: FormData) {
         return { message: error.message }
       }
     }
-    revalidatePath("/dashboard/user")
-    redirect("/dashboard/user")
   } else if (validatedFields.error) {
     return { message: validatedFields.error.message }
   }
