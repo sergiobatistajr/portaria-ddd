@@ -1,6 +1,7 @@
 import User from "@/core/domain/entities/User"
 
 export default interface UserRepository {
+  resetPassword(id: string, password: string): Promise<void>
   findById(id: string): Promise<User | null>
   findByEmail(email: string): Promise<User | null>
   update(user: Omit<User, "password">): Promise<void>
