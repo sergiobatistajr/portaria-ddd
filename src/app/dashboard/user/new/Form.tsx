@@ -56,7 +56,9 @@ export default function RegisterUserForm() {
         </SelectTrigger>
         <SelectContent>
           {roles.map((r) => (
-            <SelectItem value={r.role}>{r.placeHolder}</SelectItem>
+            <SelectItem key={r.role} value={r.role}>
+              {r.placeHolder}
+            </SelectItem>
           ))}
         </SelectContent>
       </Select>
