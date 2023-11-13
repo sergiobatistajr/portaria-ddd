@@ -16,7 +16,13 @@ type Items = {
   href: string
   icon: LucideIcon
 }[]
-export default function UserActions({ id }: { id: string }) {
+export default function UserActions({
+  id,
+  name,
+}: {
+  id: string
+  name: string
+}) {
   const items: Items = [
     {
       title: "Editar usuário",
@@ -25,7 +31,7 @@ export default function UserActions({ id }: { id: string }) {
     },
     {
       title: "Resetar Senha",
-      href: `user/password-reset/${id}`,
+      href: `user/password-reset/${id}?query=${name}`,
       icon: UnlockKeyhole,
     },
   ]
