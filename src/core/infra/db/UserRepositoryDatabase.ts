@@ -74,6 +74,7 @@ export default class UserRepositoryDatabase implements UserRepository {
           email: user.email,
           role: user.role,
           status: user.status,
+          password: user.password,
         })
       : null
   }
