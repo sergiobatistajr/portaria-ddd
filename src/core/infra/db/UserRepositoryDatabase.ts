@@ -64,7 +64,7 @@ export default class UserRepositoryDatabase implements UserRepository {
   }
   async findByEmail(email: string): Promise<User | null> {
     const user = await this.db.oneOrNone(
-      "select id, name, email, role, status from portaria.user where email = $1",
+      "select * from portaria.user where email = $1",
       [email]
     )
     return user
