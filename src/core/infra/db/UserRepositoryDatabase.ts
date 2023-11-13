@@ -5,11 +5,35 @@ import { IDatabase } from "pg-promise"
 export default class UserRepositoryDatabase implements UserRepository {
   private static instance: UserRepositoryDatabase
   private constructor(private db: IDatabase<any>) {}
+
   public static getInstance(db: IDatabase<any>): UserRepositoryDatabase {
     if (!UserRepositoryDatabase.instance) {
       UserRepositoryDatabase.instance = new UserRepositoryDatabase(db)
     }
     return UserRepositoryDatabase.instance
+  }
+  async update(user: Omit<User, "password">): Promise<void> {
+    const { id, ...data } = user
+    const keys = Object.keys(data)
+    const values = Object.values(data)
+    const updateSQL = `UPDATE portaria.user SET ${keys
+      .map((key, index) => `${key} = $${index + 1}`)
+      .join(", ")} WHERE id = $${keys.length + 1}`
+    await this.db.none(updateSQL, [...values, id])
+  }
+  async findById(id: string): Promise<User | null> {
+    const selectSQL =
+      "select id, name, email, role, status from portaria.user where id = $1"
+    const user = await this.db.oneOrNone(selectSQL, [id])
+    return user
+      ? User.create({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          status: user.status,
+        })
+      : null
   }
 
   async findFilteredUsers(
@@ -18,18 +42,17 @@ export default class UserRepositoryDatabase implements UserRepository {
     offset: number
   ): Promise<User[]> {
     const users = await this.db.any(
-      "select * from portaria.user where email ilike $1 or name ilike $2 limit $3 offset $4",
+      "select id, name, email, role, status from portaria.user where email ilike $1 or name ilike $2 limit $3 offset $4",
       [`%${query}%`, `%${query}%`, itemsPerPage, offset]
     )
-    return users.map((user) =>
-      User.create(
-        user.name,
-        user.email,
-        user.password,
-        user.role,
-        user.status,
-        user.id
-      )
+    return users.map((u) =>
+      User.create({
+        id: u.id,
+        name: u.name,
+        email: u.email,
+        role: u.role,
+        status: u.status,
+      })
     )
   }
   async countUsersPage(query: string): Promise<number> {
@@ -41,18 +64,17 @@ export default class UserRepositoryDatabase implements UserRepository {
   }
   async findByEmail(email: string): Promise<User | null> {
     const user = await this.db.oneOrNone(
-      "select * from portaria.user where email = $1",
+      "select id, name, email, role, status from portaria.user where email = $1",
       [email]
     )
     return user
-      ? User.create(
-          user.name,
-          user.email,
-          user.password,
-          user.role,
-          user.status,
-          user.id
-        )
+      ? User.create({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          status: user.status,
+        })
       : null
   }
 
