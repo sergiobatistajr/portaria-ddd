@@ -4,6 +4,7 @@ import { signIn } from "@/auth"
 import RegisterGuestEntry from "@/core/application/usecase/RegisterGuestEntry"
 import RegisterUser from "@/core/application/usecase/RegisterUser"
 import RegisterGuestDeparture from "@/core/application/usecase/RegisterGuestDeparture"
+import UpdateUser from "@/core/application/usecase/UpdateUser"
 import { auth } from "@/auth"
 import { revalidatePath } from "next/cache"
 import { guestDb, userDb } from "./database"
@@ -12,6 +13,41 @@ import { redirect } from "next/navigation"
 const registerUser = RegisterUser.getInstance(userDb)
 const registerGuestEntry = RegisterGuestEntry.getInstance(guestDb)
 const registerGuestDeparture = RegisterGuestDeparture.getInstance(guestDb)
+const updateuser = UpdateUser.getInstance(userDb)
+
+export async function updateUser(prevState: any, formData: FormData) {
+  const validatedFields = z
+    .object({
+      id: z.string().min(1),
+      name: z.string().min(1),
+      email: z.string().email().min(1),
+      status: z.string().min(1),
+      role: z.string().min(1),
+    })
+    .safeParse(Object.fromEntries(formData))
+  if (validatedFields.success) {
+    const { email, name, id, status, role } = validatedFields.data
+    try {
+      await updateuser.execute({
+        email,
+        id,
+        name,
+        role,
+        status,
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        return { message: error.message }
+      }
+    }
+    revalidatePath("/dashboard/user")
+    redirect("/dashboard/user")
+  } else if (validatedFields.error) {
+    return { message: validatedFields.error.message }
+  }
+  revalidatePath("/dashboard/user")
+  redirect("/dashboard/user")
+}
 
 export async function saveExitGuest(prevState: any, formData: FormData) {
   const validatedFields = z
