@@ -5,6 +5,7 @@ import FindUsersPage from "@/core/application/usecase/CountUsersPage"
 import FindAllGuestFiltered from "@/core/application/usecase/FindAllGuestFiltered"
 import FindFilteredUsers from "@/core/application/usecase/FindFilteredUsers"
 import FindGuestInsideFiltered from "@/core/application/usecase/FindGuestsInsideFiltered"
+import FindUserById from "@/core/application/usecase/FindUserById"
 import { unstable_noStore as noStore } from "next/cache"
 import { guestDb, userDb } from "./database"
 
@@ -15,6 +16,18 @@ const findAllGuestFiltered = FindAllGuestFiltered.getInstance(guestDb)
 const countAllGuestFilteredPage = CountAllGuestFilteredPage.getInstance(guestDb)
 const findFilteredUsers = FindFilteredUsers.getInstance(userDb)
 const findUsersPage = FindUsersPage.getInstance(userDb)
+const findUserById = FindUserById.getInstance(userDb)
+export async function fetchUserById(id: string) {
+  noStore()
+  try {
+    const user = await findUserById.execute(id)
+    return user
+  } catch (error) {
+    if (error instanceof Error) {
+      return console.log(error.message)
+    }
+  }
+}
 
 export async function fetchAllGuestFiltered(
   query: string,
