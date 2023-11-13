@@ -12,6 +12,10 @@ export default class UserRepositoryDatabase implements UserRepository {
     }
     return UserRepositoryDatabase.instance
   }
+  async resetPassword(id: string, password: string): Promise<void> {
+    const updateSQL = "update portaria.user set password = $1 where id = $2"
+    await this.db.none(updateSQL, [password, id])
+  }
   async update(user: Omit<User, "password">): Promise<void> {
     const { id, ...data } = user
     const keys = Object.keys(data)
