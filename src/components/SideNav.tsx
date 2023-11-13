@@ -1,12 +1,13 @@
-import { signOut } from "@/auth"
+import { auth, signOut } from "@/auth"
 import { PowerIcon } from "@heroicons/react/24/outline"
 import { NavLinks } from "./NavLinks"
 import { Button } from "./ui/button"
 
-export function SideNav() {
+export async function SideNav() {
+  const session = await auth()
   return (
     <nav className="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
-      <NavLinks />
+      <NavLinks role={session?.user.role!} />
       <form
         action={async () => {
           "use server"
