@@ -31,8 +31,8 @@ export const adminColumns: ColumnDef<DTO>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const { id } = row.original
-      return <UserActions id={id} />
+      const { id, nomeCompleto } = row.original
+      return <UserActions id={id} name={nomeCompleto} />
     },
   },
 ]
