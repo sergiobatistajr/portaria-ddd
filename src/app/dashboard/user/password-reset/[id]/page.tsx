@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation"
 import ResetPasswordForm from "./Form"
 
 export default function Page({
@@ -11,7 +12,10 @@ export default function Page({
     query?: string
   }
 }) {
-  const name = searchParams?.query || "Inválido"
+  if (!searchParams?.query) {
+    notFound()
+  }
+  const name = searchParams?.query
   return (
     <main className="space-y-1">
       <h1 className="text-3xl">Resetar Senha</h1>
