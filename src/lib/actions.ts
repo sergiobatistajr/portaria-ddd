@@ -121,13 +121,17 @@ export async function saveEntryGuest(prevState: any, formData: FormData) {
         })
       } catch (error) {
         if (error instanceof Error) {
-          return { message: error.message }
+          return { error: true, message: error.message }
         }
       }
   } else if (validatedFields.error) {
-    return { message: validatedFields.error.message }
+    return { error: true, message: validatedFields.error.message }
   }
   revalidatePath("/dashboard/exit")
+  return {
+    error: false,
+    message: "Sucesso",
+  }
 }
 export async function saveEntryVehicle(prevState: any, formData: FormData) {
   const session = await auth()
@@ -156,14 +160,24 @@ export async function saveEntryVehicle(prevState: any, formData: FormData) {
         await registerGuestEntry.execute(input)
       } catch (error) {
         if (error instanceof Error) {
-          return { message: error.message }
+          return {
+            error: true,
+            message: error.message,
+          }
         }
       }
     }
   } else if (validatedFields.error) {
-    return { message: validatedFields.error.message }
+    return {
+      error: true,
+      message: validatedFields.error.message,
+    }
   }
   revalidatePath("/dashboard/exit")
+  return {
+    error: false,
+    message: "Sucesso",
+  }
 }
 export async function authenticate(
   prevState: string | undefined,
