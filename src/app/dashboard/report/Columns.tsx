@@ -52,12 +52,4 @@ export const columns: ColumnDef<DTO>[] = [
     accessorKey: "entradaPor",
     header: "Entrada Por",
   },
-  {
-    id: "actions",
-    header: "Corrigir",
-    cell: ({ row }) => {
-      const { id, nomeCompleto, placa, dataEntrada } = row.original
-      return <div>Falta</div>
-    },
-  },
 ]
