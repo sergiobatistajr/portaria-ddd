@@ -56,9 +56,13 @@ export function VehicleForm() {
         max={4000}
         placeholder="3010"
       />
-      {state?.message && (
+      {state?.error ? (
         <div>
           <span className="text-rose-700 text-xl">{state?.message}</span>
+        </div>
+      ) : (
+        <div>
+          <span className="text-green-700 text-xl">{state?.message}</span>
         </div>
       )}
       <Button type="submit">Salvar entrada</Button>
