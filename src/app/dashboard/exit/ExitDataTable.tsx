@@ -22,9 +22,5 @@ export default async function ExitDateTable({
     }
   })
 
-  return (
-    <div>
-      <DataTable columns={columns} data={guests ?? []} />
-    </div>
-  )
+  return <DataTable columns={columns} data={guests ?? []} />
 }

@@ -19,7 +19,7 @@ export default function Page({
   return (
     <main className="space-y-1">
       <h1 className="text-3xl">Resetar Senha</h1>
-      <h2 className="text-2xl font-bold">{name}</h2>
+      <p className="text-2xl font-bold">{name}</p>
       <ResetPasswordForm id={params.id} />
     </main>
   )

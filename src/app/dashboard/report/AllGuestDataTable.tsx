@@ -28,9 +28,5 @@ export default async function AllGuestDataTable({
     }
   })
 
-  return (
-    <div>
-      <DataTable columns={columns} data={guests ?? []} />
-    </div>
-  )
+  return <DataTable columns={columns} data={guests ?? []} />
 }

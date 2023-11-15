@@ -102,9 +102,9 @@ export default function DialogExitGuest({
           </div>
           <DialogFooter>
             {state?.message && (
-              <div>
+              <>
                 <span className="text-rose-700 text-xl">{state?.message}</span>
-              </div>
+              </>
             )}
             <Button type="submit">Salvar saída</Button>
           </DialogFooter>

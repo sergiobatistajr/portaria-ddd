@@ -37,13 +37,13 @@ export function GuestForm() {
         placeholder="3010"
       />
       {state?.error ? (
-        <div>
+        <>
           <span className="text-rose-700 text-xl">{state?.message}</span>
-        </div>
+        </>
       ) : (
-        <div>
+        <>
           <span className="text-green-700 text-xl">{state?.message}</span>
-        </div>
+        </>
       )}
       <Button type="submit">Salvar entrada</Button>
     </form>

@@ -10,7 +10,6 @@ export default async function UsersDataTable({
   query: string
   currentPage: number
 }) {
-  // verificando se o usuario é administrador para permitir editar usuario
   const session = await auth()
   let columns = userColumns
   if (session?.user.role === "admin") columns = adminColumns
@@ -33,9 +32,5 @@ export default async function UsersDataTable({
     }
   })
 
-  return (
-    <div>
-      <DataTable columns={columns} data={users ?? []} />
-    </div>
-  )
+  return <DataTable columns={columns} data={users ?? []} />
 }
