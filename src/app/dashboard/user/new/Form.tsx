@@ -80,7 +80,7 @@ export default function RegisterUserForm() {
       />
       {state?.message && (
         <>
-          <span className="text-rose-700 text-xl">{state?.message}</span>
+          <span className="text-rose-700 text-xl flex">{state?.message}</span>
         </>
       )}
       <Button type="submit">Salvar</Button>

@@ -58,11 +58,11 @@ export function VehicleForm() {
       />
       {state?.error ? (
         <>
-          <span className="text-rose-700 text-xl">{state?.message}</span>
+          <span className="flex text-rose-700 text-xl">{state?.message}</span>
         </>
       ) : (
         <>
-          <span className="text-green-700 text-xl">{state?.message}</span>
+          <span className="flex text-green-700 text-xl">{state?.message}</span>
         </>
       )}
       <Button type="submit">Salvar entrada</Button>

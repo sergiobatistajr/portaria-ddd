@@ -98,7 +98,7 @@ export default function UpdateUserForm({
       </Select>
       {state?.message && (
         <>
-          <span className="text-rose-700 text-xl">{state?.message}</span>
+          <span className="flex text-rose-700 text-xl">{state?.message}</span>
         </>
       )}
       <Button type="submit">Atualizar</Button>
