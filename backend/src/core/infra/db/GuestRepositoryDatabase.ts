@@ -1,6 +1,6 @@
 import GuestRepository, {
   findAllGuestFilteredOutput,
-} from "@/core/application/repository/GuestRepository"
+} from "../../application/repository/GuestRepository"
 import Guest from "../../domain/entities/Guest"
 import { IDatabase } from "pg-promise"
 

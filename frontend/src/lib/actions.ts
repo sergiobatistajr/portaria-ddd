@@ -1,21 +1,10 @@
 "use server"
 import { z } from "zod"
 import { signIn } from "@/auth"
-import RegisterGuestEntry from "@/core/application/usecase/RegisterGuestEntry"
-import RegisterUser from "@/core/application/usecase/RegisterUser"
-import RegisterGuestDeparture from "@/core/application/usecase/RegisterGuestDeparture"
-import UpdateUser from "@/core/application/usecase/UpdateUser"
 import { auth } from "@/auth"
 import { revalidatePath } from "next/cache"
-import { guestDb, userDb } from "./database"
 import { redirect } from "next/navigation"
-import ResetPassword from "@/core/application/usecase/ResetPassword"
 
-const registerUser = RegisterUser.getInstance(userDb)
-const registerGuestEntry = RegisterGuestEntry.getInstance(guestDb)
-const registerGuestDeparture = RegisterGuestDeparture.getInstance(guestDb)
-const updateuser = UpdateUser.getInstance(userDb)
-const resetPasswordUser = ResetPassword.getInstance(userDb)
 export async function resetPassword(prevState: any, formData: FormData) {
   const validatedFields = z
     .object({

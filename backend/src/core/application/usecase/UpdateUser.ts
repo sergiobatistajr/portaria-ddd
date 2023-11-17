@@ -1,4 +1,4 @@
-import User from "@/core/domain/entities/User"
+import User from "../../domain/entities/User"
 import UserRepository from "../repository/UserRepository"
 
 export default class UpdateUser {

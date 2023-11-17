@@ -1,4 +1,4 @@
-import User from "@/core/domain/entities/User"
+import User from "../../domain/entities/User"
 
 export default interface UserRepository {
   resetPassword(id: string, password: string): Promise<void>

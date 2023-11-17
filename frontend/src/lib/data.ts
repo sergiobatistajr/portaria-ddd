@@ -1,22 +1,6 @@
 "use server"
-import CountAllGuestFilteredPage from "@/core/application/usecase/CountAllGuestFilteredPage"
-import CountGuestsInsideFilteredPage from "@/core/application/usecase/CountGuestsInsideFilteredPage"
-import FindUsersPage from "@/core/application/usecase/CountUsersPage"
-import FindAllGuestFiltered from "@/core/application/usecase/FindAllGuestFiltered"
-import FindFilteredUsers from "@/core/application/usecase/FindFilteredUsers"
-import FindGuestInsideFiltered from "@/core/application/usecase/FindGuestsInsideFiltered"
-import FindUserById from "@/core/application/usecase/FindUserById"
 import { unstable_noStore as noStore } from "next/cache"
-import { guestDb, userDb } from "./database"
 
-const findGuestInsideFiltered = FindGuestInsideFiltered.getInstance(guestDb)
-const countGuestsInsideFilteredPage =
-  CountGuestsInsideFilteredPage.getInstance(guestDb)
-const findAllGuestFiltered = FindAllGuestFiltered.getInstance(guestDb)
-const countAllGuestFilteredPage = CountAllGuestFilteredPage.getInstance(guestDb)
-const findFilteredUsers = FindFilteredUsers.getInstance(userDb)
-const findUsersPage = FindUsersPage.getInstance(userDb)
-const findUserById = FindUserById.getInstance(userDb)
 export async function fetchUserById(id: string) {
   noStore()
   try {

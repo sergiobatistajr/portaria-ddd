@@ -1,4 +1,3 @@
-import Guest from "@/core/domain/entities/Guest"
 import GuestRepository from "../repository/GuestRepository"
 
 export default class FindAllGuestFiltered {
