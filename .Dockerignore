@@ -5,3 +5,4 @@ Dockerfile
 .next/
 create.sql
 drop.sql
+.env
