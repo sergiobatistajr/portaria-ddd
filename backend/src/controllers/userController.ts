@@ -1,32 +1,25 @@
 import { Request, Response } from "express"
 import FindFilteredUsers from "../core/application/usecase/FindFilteredUsers"
+import CountUsersPage from "../core/application/usecase/CountUsersPage"
 
 export default class UserController {
-  private static instance: UserController
-  private constructor(private findFilteredUsers: FindFilteredUsers) {}
-  public static getInstance(
-    findFilteredUsers: FindFilteredUsers
-  ): UserController {
-    if (!UserController.instance) {
-      UserController.instance = new UserController(findFilteredUsers)
-    }
-    return UserController.instance
-  }
-  async findFiltered(request: Request, response: Response): Promise<Response> {
-    const { query, currentPage } = request.body
+  constructor(
+    private readonly findFilteredUsersUsecase: FindFilteredUsers,
+    private readonly countUsersPageUsecase: CountUsersPage
+  ) {}
 
-    try {
-      const users = await this.findFilteredUsers.execute(
-        query ?? "",
-        currentPage ?? 1
-      )
-      return response.status(201).json({ users })
-    } catch (err) {
-      if (err instanceof Error)
-        return response
-          .status(400)
-          .json({ message: err.message || "Unexpected error." })
-    }
-    return response.status(500).send()
+  async findFilteredUsers(req: Request, res: Response): Promise<Response> {
+    const { query = "", currentPage = 1 } = req.query
+    const users = await this.findFilteredUsersUsecase.execute(
+      query as string,
+      Number(currentPage)
+    )
+
+    return res.status(200).json({ users })
+  }
+  async countUsersPage(req: Request, res: Response): Promise<Response> {
+    const { query = "" } = req.query
+    const totalPages = await this.countUsersPageUsecase.execute(query as string)
+    return res.status(200).json({ totalPages })
   }
 }
