@@ -15,11 +15,11 @@ export default class UserController {
       Number(currentPage)
     )
 
-    return res.status(200).json({ users })
+    return res.status(200).json(users)
   }
   async countUsersPage(req: Request, res: Response): Promise<Response> {
     const { query = "" } = req.query
     const totalPages = await this.countUsersPageUsecase.execute(query as string)
-    return res.status(200).json({ totalPages })
+    return res.status(200).json(totalPages)
   }
 }
