@@ -27,23 +27,23 @@ services:
       - postgres_db
     networks:
       - minha-rede
-  # frontend:
-  #   build: ./frontend/
-  #   restart: no
-  #   environment:
-  #     - POSTGRES_URL=postgres://admin:admin@postgres_db:5432/app
-  #     - AUTH_SECRET=dPq15u8ofTVLRLCWl+D0l1bFl50mO38XDfxsLPvkJtQ=
-  #     - AUTH_URL=http://localhost:3000/api/auth
-  #   ports:
-  #     - 3000:3000
-  #   cpus: "0.6"
-  #   mem_limit: 1g
-  #   volumes:
-  #     - ./frontend/:/usr/src/app
-  #   depends_on:
-  #     - backend
-  #     - postgres_db
-  #   networks:
-  #     - minha-rede
+  frontend:
+    build: ./frontend/
+    restart: no
+    environment:
+      - EXPRESS_URL=http://backend:3001
+      - AUTH_SECRET=dPq15u8ofTVLRLCWl+D0l1bFl50mO38XDfxsLPvkJtQ=
+      - AUTH_URL=http://localhost:3000/api/auth
+    ports:
+      - 3000:3000
+    cpus: "0.6"
+    mem_limit: 1g
+    volumes:
+      - ./frontend/:/usr/src/app
+    depends_on:
+      - backend
+      - postgres_db
+    networks:
+      - minha-rede
 networks:
   minha-rede:
