@@ -1,8 +1,8 @@
-node_modules/
-Dockerfile
-.dockerignore
+frontend/node_modules/
+frontend/Dockerfile
+frontend/.env
+frontend/.next/
+.Dockerignore
 .git/
-.next/
 create.sql
 drop.sql
-.env
