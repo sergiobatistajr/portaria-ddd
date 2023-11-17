@@ -1,4 +1,14 @@
 services:
+  portaria:
+    build: ./
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/usr/src/app
+    depends_on:
+      - db
+    networks:
+      - minha-rede
   db:
     image: postgres
     restart: always
@@ -8,7 +18,7 @@ services:
       - POSTGRES_DB=app
     ports:
       - 5432:5432
-  portaria:
-    build: ./
-    ports:
-      - 3000:3000
+    networks:
+      - minha-rede
+networks:
+  minha-rede:
