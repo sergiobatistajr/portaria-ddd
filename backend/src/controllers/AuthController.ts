@@ -1,7 +1,6 @@
 import LoginUser from "../core/application/usecase/LoginUser"
 import RegisterUser from "../core/application/usecase/RegisterUser"
 import { Request, Response } from "express"
-import UserStatus from "../core/domain/shared/UserStatus"
 
 interface Usecases {
   loginUser: LoginUser
@@ -13,20 +12,36 @@ export default class AuthController {
   async login(input: Input): Promise<Output> {
     const { req, res } = input
     const { email, password } = req.body
-    const user = await this.usecase.loginUser.execute({ email, password })
-    return res.status(200).json(UserStatus)
+
+    try {
+      const user = await this.usecase.loginUser.execute({ email, password })
+      return res.status(200).json(user)
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(401).json({ message: error.message })
+      }
+    }
+    return res.status(500).json({ message: "Unexpected error" })
   }
   async resgiter(input: Input): Promise<Output> {
     const { req, res } = input
     const { email, password, confirmPassword, name, role } = req.body
-    await this.usecase.registerUser.execute({
-      confirmPassword,
-      email,
-      name,
-      password,
-      role,
-    })
-    return res.status(200).send("sucesso").end()
+    console.log(req.body)
+    try {
+      await this.usecase.registerUser.execute({
+        confirmPassword,
+        email,
+        name,
+        password,
+        role,
+      })
+      return res.status(200).send("sucesso")
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(401).json({ message: error.message })
+      }
+    }
+    return res.status(500).json({ message: "Unexpected error" })
   }
 }
 
