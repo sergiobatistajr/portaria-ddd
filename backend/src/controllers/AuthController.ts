@@ -1,6 +1,7 @@
 import LoginUser from "../core/application/usecase/LoginUser"
 import RegisterUser from "../core/application/usecase/RegisterUser"
 import { Request, Response } from "express"
+import JWTProvider from "../core/domain/shared/JWTProvider"
 
 interface Usecases {
   loginUser: LoginUser
@@ -12,10 +13,16 @@ export default class AuthController {
   async login(input: Input): Promise<Output> {
     const { req, res } = input
     const { email, password } = req.body
-
     try {
       const user = await this.usecase.loginUser.execute({ email, password })
-      return res.status(200).json(user)
+      const token = JWTProvider.sign({
+        userId: user.id,
+        userName: user.name,
+        userEmail: user.email,
+        userRole: user.role,
+      })
+      res.setHeader("Authorization", `Bearer ${token}`)
+      return res.status(201).end()
     } catch (error) {
       if (error instanceof Error) {
         return res.status(401).json({ message: error.message })
@@ -26,7 +33,6 @@ export default class AuthController {
   async resgiter(input: Input): Promise<Output> {
     const { req, res } = input
     const { email, password, confirmPassword, name, role } = req.body
-    console.log(req.body)
     try {
       await this.usecase.registerUser.execute({
         confirmPassword,
