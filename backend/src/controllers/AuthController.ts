@@ -41,7 +41,7 @@ export default class AuthController {
         password,
         role,
       })
-      return res.status(200).send("sucesso")
+      return res.status(200).end()
     } catch (error) {
       if (error instanceof Error) {
         return res.status(401).json({ message: error.message })
