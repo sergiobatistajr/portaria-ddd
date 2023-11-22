@@ -12,8 +12,18 @@ export default class ResetPassword {
     return ResetPassword.intance
   }
   async execute(input: Input) {
+    if (!input.password || !input.confirmPassword) {
+      throw new Error("Todos os campos são obrigatorios")
+    }
+    if (!input.id) {
+      throw new Error("Usuário não existe")
+    }
     if (input.confirmPassword !== input.password) {
       throw new Error("Senhas não são iguais.")
+    }
+    const user = await this.userRepository.findById(input.id)
+    if (!user) {
+      throw new Error("Usuário não existe")
     }
     const hash = HashPassword.hash(StrongPassword.validate(input.password))
     await this.userRepository.resetPassword(input.id, hash)
