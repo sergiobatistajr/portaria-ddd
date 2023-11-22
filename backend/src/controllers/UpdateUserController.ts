@@ -7,11 +7,10 @@ export default class UpdateUserController {
     useCase: UpdateUser,
     ...middleware: any[]
   ) {
-    server.patch("users/:id", ...middleware, async (req, res) => {
+    server.patch("/users/:id", ...middleware, async (req, res) => {
       try {
         const { id } = req.params
         const { email, name, role, status } = req.body
-
         await useCase.execute({ email, id, name, role, status })
         return res.status(200).end()
       } catch (error) {
