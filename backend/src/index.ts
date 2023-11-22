@@ -16,6 +16,9 @@ import CountUsersPage from "./core/application/usecase/CountUsersPage"
 import CountUsersPageController from "./controllers/CountUsersPageController"
 import ResetPasswordController from "./controllers/ResetPasswordController"
 import ResetPassword from "./core/application/usecase/ResetPassword"
+import RegisterGuestEntry from "./core/application/usecase/RegisterGuestEntry"
+import GuestRepositoryDatabase from "./core/infra/db/GuestRepositoryDatabase"
+import RegisterGuestEntryController from "./controllers/RegisterGuestEntry"
 
 let dbInstance: IDatabase<any>
 export function getDbInstance() {
@@ -27,7 +30,7 @@ export function getDbInstance() {
 }
 //dbs
 const userDb = UserRepositoryDatabase.getInstance(getDbInstance())
-
+const guestDb = GuestRepositoryDatabase.getInstance(getDbInstance())
 //express
 const app = express()
 app.use(express.json())
@@ -54,6 +57,9 @@ new UpdateUserController(app, updateUser, authMiddleware)
 
 const resetPasswordUser = ResetPassword.getInstance(userDb)
 new ResetPasswordController(app, resetPasswordUser, authMiddleware)
+
+const registerGuestEntry = RegisterGuestEntry.getInstance(guestDb)
+new RegisterGuestEntryController(app, registerGuestEntry, authMiddleware)
 
 app.listen(3001, () => {
   console.log("Aplicação está rodando na porta 3001")
