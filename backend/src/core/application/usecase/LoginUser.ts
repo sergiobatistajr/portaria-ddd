@@ -1,4 +1,5 @@
 import HashPassword from "../../domain/shared/HashPassword"
+import JWTProvider from "../../domain/shared/JWTProvider"
 import UserRepository from "../repository/UserRepository"
 
 export default class LoginUser {
@@ -10,7 +11,7 @@ export default class LoginUser {
     }
     return LoginUser.instance
   }
-  async execute(input: Input): Promise<Output> {
+  async execute(input: Input) {
     if (!input.email) {
       throw new Error("Email é obrigatório")
     }
@@ -24,26 +25,22 @@ export default class LoginUser {
     if (user.status !== "active") {
       throw new Error("Usuário desativado")
     }
+    console.log(user)
     const isValid = HashPassword.verify(input.password, user.password!)
     if (!isValid) {
       throw new Error("Senha inválida")
     }
-    return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-    }
+    const token = JWTProvider.sign({
+      userId: user.id,
+      userName: user.name,
+      userEmail: user.email,
+      userRole: user.role,
+    })
+    return token
   }
 }
 
 type Input = {
   email: string
   password: string
-}
-type Output = {
-  id: string
-  email: string
-  name: string
-  role: string
 }
