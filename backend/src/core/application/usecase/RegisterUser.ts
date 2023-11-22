@@ -20,18 +20,19 @@ export default class RegisterUser {
     if (user) {
       throw new Error("Usuário já existe")
     }
-    if (password === confirmPassword) {
-      const hash = HashPassword.hash(password)
-      await this.userRepository.save(
-        User.create({
-          name: input.name,
-          email: input.email,
-          password: hash,
-          role: input.role,
-          status,
-        })
-      )
+    if (password !== confirmPassword) {
+      throw new Error("Senha e confirmação de senhas não são iguais")
     }
+    const hash = HashPassword.hash(password)
+    await this.userRepository.save(
+      User.create({
+        name: input.name,
+        email: input.email,
+        password: hash,
+        role: input.role,
+        status,
+      })
+    )
   }
 }
 
