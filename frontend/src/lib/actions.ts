@@ -17,7 +17,20 @@ export async function resetPassword(prevState: any, formData: FormData) {
   if (validatedFields.success) {
     const { id, confirmPassword, password } = validatedFields.data
     try {
-      await resetPasswordUser.execute({ id, confirmPassword, password })
+      const url = `${URL}/users/reset-password/${id}`
+      const token = cookies().get("token")?.value
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ confirmPassword, password }),
+      })
+      if (!res.ok) {
+        const errorMessage = await res.text()
+        throw new Error(errorMessage)
+      }
     } catch (error) {
       if (error instanceof Error) {
         return { message: error.message }
@@ -42,8 +55,8 @@ export async function updateUser(prevState: any, formData: FormData) {
   if (validatedFields.success) {
     const { email, name, id, status, role } = validatedFields.data
     try {
-      let token = cookies().get("token")?.value
-      let url = `${URL}/users/${id}`
+      const token = cookies().get("token")?.value
+      const url = `${URL}/users/${id}`
       const res = await fetch(url, {
         method: "PATCH",
         headers: {
@@ -203,7 +216,7 @@ export async function createUser(prevState: any, formData: FormData) {
     const { email, name, password, confirmPassword, role } =
       validatedFields.data
     try {
-      let token = cookies().get("token")?.value
+      const token = cookies().get("token")?.value
       const url = `${URL}/users`
       const res = await fetch(url, {
         method: "POST",
