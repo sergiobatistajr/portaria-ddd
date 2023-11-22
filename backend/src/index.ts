@@ -14,6 +14,8 @@ import FindUserById from "./core/application/usecase/FindUserById"
 import FindUserByIdController from "./controllers/FindUserByIdController"
 import CountUsersPage from "./core/application/usecase/CountUsersPage"
 import CountUsersPageController from "./controllers/CountUsersPageController"
+import ResetPasswordController from "./controllers/ResetPasswordController"
+import ResetPassword from "./core/application/usecase/ResetPassword"
 
 let dbInstance: IDatabase<any>
 export function getDbInstance() {
@@ -49,6 +51,9 @@ new FindUserByIdController(app, findUserById, authMiddleware)
 
 const updateUser = UpdateUser.getInstance(userDb)
 new UpdateUserController(app, updateUser, authMiddleware)
+
+const resetPasswordUser = ResetPassword.getInstance(userDb)
+new ResetPasswordController(app, resetPasswordUser, authMiddleware)
 
 app.listen(3001, () => {
   console.log("Aplicação está rodando na porta 3001")
