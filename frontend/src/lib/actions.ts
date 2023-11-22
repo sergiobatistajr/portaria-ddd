@@ -4,7 +4,8 @@ import { signIn } from "@/auth"
 import { auth } from "@/auth"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
-
+import { cookies } from "next/headers"
+const URL = `${process.env.EXPRESS_URL}`
 export async function resetPassword(prevState: any, formData: FormData) {
   const validatedFields = z
     .object({
@@ -41,13 +42,20 @@ export async function updateUser(prevState: any, formData: FormData) {
   if (validatedFields.success) {
     const { email, name, id, status, role } = validatedFields.data
     try {
-      await updateuser.execute({
-        email,
-        id,
-        name,
-        role,
-        status,
+      let token = cookies().get("token")?.value
+      let url = `${URL}/users/${id}`
+      const res = await fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ email, name, role, status }),
       })
+      if (!res.ok) {
+        const errorMessage = await res.text()
+        throw new Error(errorMessage)
+      }
     } catch (error) {
       if (error instanceof Error) {
         return { message: error.message }
@@ -195,13 +203,20 @@ export async function createUser(prevState: any, formData: FormData) {
     const { email, name, password, confirmPassword, role } =
       validatedFields.data
     try {
-      await registerUser.execute({
-        email,
-        name,
-        password,
-        confirmPassword,
-        role,
+      let token = cookies().get("token")?.value
+      const url = `${URL}/users`
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ email, name, password, confirmPassword, role }),
       })
+      if (!res.ok) {
+        const errorMessage = await res.text()
+        throw new Error(errorMessage)
+      }
     } catch (error) {
       if (error instanceof Error) {
         return { message: error.message }
