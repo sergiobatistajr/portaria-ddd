@@ -27,7 +27,6 @@ export default class LoginUser {
       email: user.email,
       name: user.name,
       role: user.role,
-      status: user.status,
     }
   }
 }
@@ -41,5 +40,4 @@ type Output = {
   email: string
   name: string
   role: string
-  status: string
 }
