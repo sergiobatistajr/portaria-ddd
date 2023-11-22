@@ -1,11 +1,33 @@
 import NextAuth from "next-auth"
 import { authConfig } from "./auth.config"
 import Credentials from "next-auth/providers/credentials"
+import { cookies } from "next/headers"
 import { z } from "zod"
-import LoginUser from "./core/application/usecase/LoginUser"
-import { userDb } from "./lib/database"
+const URL = `${process.env.EXPRESS_URL}`
+async function loginUser({
+  email,
+  password,
+}: {
+  email: string
+  password: string
+}) {
+  const url = `${URL}/login`
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  })
+  if (!res.ok) {
+    throw new Error(`HTTP error! status: ${res.status}`)
+  }
 
-const loginUser = LoginUser.getInstance(userDb)
+  const data = await res.json()
+  cookies().set("token", data.token, { httpOnly: true })
+  return data
+}
+
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
@@ -16,7 +38,7 @@ export const { auth, signIn, signOut } = NextAuth({
           .safeParse(credentials)
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data
-          const user = await loginUser.execute({ email, password })
+          const user = loginUser({ email, password })
           return user
         }
         return null
