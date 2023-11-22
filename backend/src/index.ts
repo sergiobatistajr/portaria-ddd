@@ -38,9 +38,6 @@ const authMiddleware = new AuthMiddleware()
 const registerUser = RegisterUser.getInstance(userDb)
 new RegisterUserController(app, registerUser, authMiddleware)
 
-const updateUser = UpdateUser.getInstance(userDb)
-new UpdateUserController(app, updateUser, authMiddleware)
-
 const findFilteredUsers = FindFilteredUsers.getInstance(userDb)
 new FindFilteredUserController(app, findFilteredUsers, authMiddleware)
 
@@ -49,6 +46,9 @@ new CountUsersPageController(app, countUsersPage, authMiddleware)
 
 const findUserById = FindUserById.getInstance(userDb)
 new FindUserByIdController(app, findUserById, authMiddleware)
+
+const updateUser = UpdateUser.getInstance(userDb)
+new UpdateUserController(app, updateUser, authMiddleware)
 
 app.listen(3001, () => {
   console.log("Aplicação está rodando na porta 3001")
