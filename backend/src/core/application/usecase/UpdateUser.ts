@@ -13,6 +13,15 @@ export default class UpdateUser {
   }
 
   async execute(input: Input): Promise<void> {
+    if (
+      !input.email ||
+      !input.id ||
+      !input.name ||
+      !input.role ||
+      !input.status
+    ) {
+      throw new Error("Campos obrigatorios")
+    }
     const user = await this.userRepository.findById(input.id)
     if (!user) {
       throw new Error("Usuário não existe")
