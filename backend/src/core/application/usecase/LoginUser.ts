@@ -25,7 +25,6 @@ export default class LoginUser {
     if (user.status !== "active") {
       throw new Error("Usuário desativado")
     }
-    console.log(user)
     const isValid = HashPassword.verify(input.password, user.password!)
     if (!isValid) {
       throw new Error("Senha inválida")
@@ -36,7 +35,15 @@ export default class LoginUser {
       userEmail: user.email,
       userRole: user.role,
     })
-    return token
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      status: user.status,
+      token: token,
+    }
   }
 }
 
