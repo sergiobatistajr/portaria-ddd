@@ -11,6 +11,12 @@ export default class LoginUser {
     return LoginUser.instance
   }
   async execute(input: Input): Promise<Output> {
+    if (!input.email) {
+      throw new Error("Email é obrigatório")
+    }
+    if (!input.password) {
+      throw new Error("Senha é obrigatória")
+    }
     const user = await this.userRepository.findByEmail(input.email)
     if (!user) {
       throw new Error("Usuário não registrado")
