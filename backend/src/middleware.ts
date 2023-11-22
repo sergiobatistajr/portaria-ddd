@@ -10,40 +10,40 @@ declare module "express-serve-static-core" {
   }
 }
 
-export default function authMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  const authHeader = req.headers.authorization
+export default class AuthMiddleware {
+  constructor() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      const authHeader = req.headers.authorization
 
-  if (!authHeader) {
-    return res.status(401).json({ error: "No token provided" })
-  }
+      if (!authHeader) {
+        return res.status(401).json({ error: "No token provided" })
+      }
 
-  const parts = authHeader.split(" ")
+      const parts = authHeader.split(" ")
 
-  if (parts.length !== 2) {
-    return res.status(401).json({ error: "Token error" })
-  }
+      if (parts.length !== 2) {
+        return res.status(401).json({ error: "Token error" })
+      }
 
-  const [scheme, token] = parts
+      const [scheme, token] = parts
 
-  if (!/^Bearer$/i.test(scheme)) {
-    return res.status(401).json({ error: "Token malformatted" })
-  }
+      if (!/^Bearer$/i.test(scheme)) {
+        return res.status(401).json({ error: "Token malformatted" })
+      }
 
-  const decoded = JWTProvider.verify(token)
+      const decoded = JWTProvider.verify(token)
 
-  if (typeof decoded === "object" && "userId" in decoded) {
-    Object.assign(req, {
-      userId: decoded.userId,
-      userEmail: decoded.userEmail,
-      userName: decoded.userName,
-      userRole: decoded.userRole,
-    })
-    next()
-  } else {
-    return res.status(401).json({ error: "Invalid token" })
+      if (typeof decoded === "object" && "userId" in decoded) {
+        Object.assign(req, {
+          userId: decoded.userId,
+          userEmail: decoded.userEmail,
+          userName: decoded.userName,
+          userRole: decoded.userRole,
+        })
+        next()
+      } else {
+        return res.status(401).json({ error: "Invalid token" })
+      }
+    }
   }
 }
