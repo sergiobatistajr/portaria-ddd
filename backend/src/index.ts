@@ -29,6 +29,8 @@ import FindAllGuestFiltered from "./core/application/usecase/FindAllGuestFiltere
 import FindAllGuestsFilteredController from "./controllers/FindAllGuestsFilteredController"
 import CountAllGuestsFilteredPageController from "./controllers/CountAllGuestsFilteredPageController"
 import CountAllGuestFilteredPage from "./core/application/usecase/CountAllGuestFilteredPage"
+import GuestsGenerateDataChartsController from "./controllers/GuestsGenerateDataChartsController"
+import GuestsGenerateDataCharts from "./core/application/usecase/GuestsGenerateDataCharts"
 
 let dbInstance: IDatabase<any>
 export function getDbInstance() {
@@ -101,6 +103,13 @@ const countAllGuestsFilteredPage =
 new CountAllGuestsFilteredPageController(
   app,
   countAllGuestsFilteredPage,
+  authMiddleware
+)
+
+const guestsGenerateDataCharts = GuestsGenerateDataCharts.getInstance(guestDb)
+new GuestsGenerateDataChartsController(
+  app,
+  guestsGenerateDataCharts,
   authMiddleware
 )
 app.listen(3001, () => {
