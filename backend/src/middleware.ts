@@ -36,8 +36,6 @@ export default class AuthMiddleware {
       if (typeof decoded === "object" && "userId" in decoded) {
         Object.assign(req, {
           userId: decoded.userId,
-          userEmail: decoded.userEmail,
-          userName: decoded.userName,
           userRole: decoded.userRole,
         })
         next()
