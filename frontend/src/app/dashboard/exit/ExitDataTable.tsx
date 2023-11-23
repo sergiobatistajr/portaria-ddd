@@ -11,16 +11,25 @@ export default async function ExitDateTable({
   currentPage: number
 }) {
   const data = await fetchGuestFilteredInside(query, currentPage)
-  const guests = data?.map((g) => {
-    return {
-      id: g.id,
-      nomeCompleto: g.name,
-      dataEntrada: formatDateToLocal(g.entryDate.toISOString()),
-      placa: g.plate ?? "-",
-      modelo: g.model ?? "-",
-      apartamento: g.apartment?.toString() ?? "-",
+  const guests = data?.map(
+    (g: {
+      id: string
+      name: string
+      entryDate: string
+      plate: string
+      model: string
+      apartment: string
+    }) => {
+      return {
+        id: g.id,
+        nomeCompleto: g.name,
+        dataEntrada: formatDateToLocal(g.entryDate),
+        placa: g.plate ?? "-",
+        modelo: g.model ?? "-",
+        apartamento: g.apartment?.toString() ?? "-",
+      }
     }
-  })
+  )
 
   return <DataTable columns={columns} data={guests ?? []} />
 }
