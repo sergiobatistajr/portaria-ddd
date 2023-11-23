@@ -25,7 +25,7 @@ export default async function Page({
         <Suspense key={query + currentPage} fallback={<SkeletonDataTable />}>
           <ExitDateTable query={query} currentPage={currentPage} />
         </Suspense>
-        <Pagination totalPages={totalPages} />
+        <Pagination totalPages={parseInt(totalPages)} />
       </div>
     </main>
   )
