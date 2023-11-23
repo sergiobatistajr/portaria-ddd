@@ -122,13 +122,26 @@ export async function saveEntryGuest(prevState: any, formData: FormData) {
     const { name, entryDate, apartment, observation } = validatedFields.data
     if (session?.user.id)
       try {
-        await registerGuestEntry.execute({
-          name,
-          entryDate: new Date(entryDate),
-          createdBy: session?.user?.id,
-          apartment,
-          observation,
+        const token = cookies().get("token")?.value
+        const url = `${URL}/guests`
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name,
+            entryDate: new Date(entryDate),
+            createdBy: session?.user?.id,
+            apartment,
+            observation,
+          }),
         })
+        if (!res.ok) {
+          const errorMessage = await res.text()
+          throw new Error(errorMessage)
+        }
       } catch (error) {
         if (error instanceof Error) {
           return { error: true, message: error.message }
@@ -167,7 +180,20 @@ export async function saveEntryVehicle(prevState: any, formData: FormData) {
         createdBy: session?.user?.id,
       }
       try {
-        await registerGuestEntry.execute(input)
+        const token = cookies().get("token")?.value
+        const url = `${URL}/guests`
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(input),
+        })
+        if (!res.ok) {
+          const errorMessage = await res.text()
+          throw new Error(errorMessage)
+        }
       } catch (error) {
         if (error instanceof Error) {
           return {
