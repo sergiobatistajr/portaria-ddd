@@ -53,7 +53,7 @@ export const columns: ColumnDef<DTO>[] = [
     header: "Corrigir",
     cell: ({ row }) => {
       const { id, nomeCompleto, placa, dataEntrada } = row.original
-      return <>...</>
+      return <button>...</button>
     },
   },
 ]
