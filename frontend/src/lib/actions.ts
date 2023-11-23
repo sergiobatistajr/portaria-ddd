@@ -91,10 +91,20 @@ export async function saveExitGuest(prevState: any, formData: FormData) {
   if (validatedFields.success) {
     const { id, departureDate } = validatedFields.data
     try {
-      await registerGuestDeparture.execute({
-        id,
-        departureDate: new Date(departureDate),
+      const token = cookies().get("token")?.value
+      const url = `${URL}/guests/${id}`
+      const res = await fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ departureDate }),
       })
+      if (!res.ok) {
+        const errorMessage = await res.text()
+        throw new Error(errorMessage)
+      }
     } catch (error) {
       if (error instanceof Error) {
         return { message: error.message }
@@ -132,7 +142,7 @@ export async function saveEntryGuest(prevState: any, formData: FormData) {
           },
           body: JSON.stringify({
             name,
-            entryDate: new Date(entryDate),
+            entryDate,
             createdBy: session?.user?.id,
             apartment,
             observation,
