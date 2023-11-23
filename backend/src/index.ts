@@ -1,24 +1,28 @@
 import express from "express"
 import pgPromise, { IDatabase } from "pg-promise"
-import UserRepositoryDatabase from "./core/infra/db/UserRepositoryDatabase"
-import LoginUser from "./core/application/usecase/LoginUser"
-import LoginController from "./controllers/LoginController"
-import RegisterUser from "./core/application/usecase/RegisterUser"
-import RegisterUserController from "./controllers/RegisterController"
-import AuthMiddleware from "./middleware"
-import UpdateUser from "./core/application/usecase/UpdateUser"
-import UpdateUserController from "./controllers/UpdateUserController"
-import FindFilteredUsers from "./core/application/usecase/FindFilteredUsers"
-import FindFilteredUserController from "./controllers/FindFilteredUserController"
-import FindUserById from "./core/application/usecase/FindUserById"
-import FindUserByIdController from "./controllers/FindUserByIdController"
-import CountUsersPage from "./core/application/usecase/CountUsersPage"
 import CountUsersPageController from "./controllers/CountUsersPageController"
-import ResetPasswordController from "./controllers/ResetPasswordController"
-import ResetPassword from "./core/application/usecase/ResetPassword"
-import RegisterGuestEntry from "./core/application/usecase/RegisterGuestEntry"
-import GuestRepositoryDatabase from "./core/infra/db/GuestRepositoryDatabase"
+import FindFilteredUserController from "./controllers/FindFilteredUserController"
+import FindGuestsInsideFilteredController from "./controllers/FindGuestsInsideFilteredController"
+import FindUserByIdController from "./controllers/FindUserByIdController"
+import LoginController from "./controllers/LoginController"
+import RegisterUserController from "./controllers/RegisterController"
 import RegisterGuestEntryController from "./controllers/RegisterGuestEntry"
+import ResetPasswordController from "./controllers/ResetPasswordController"
+import UpdateUserController from "./controllers/UpdateUserController"
+import CountUsersPage from "./core/application/usecase/CountUsersPage"
+import FindFilteredUsers from "./core/application/usecase/FindFilteredUsers"
+import FindGuestInsideFiltered from "./core/application/usecase/FindGuestsInsideFiltered"
+import FindUserById from "./core/application/usecase/FindUserById"
+import LoginUser from "./core/application/usecase/LoginUser"
+import RegisterGuestEntry from "./core/application/usecase/RegisterGuestEntry"
+import RegisterUser from "./core/application/usecase/RegisterUser"
+import ResetPassword from "./core/application/usecase/ResetPassword"
+import UpdateUser from "./core/application/usecase/UpdateUser"
+import GuestRepositoryDatabase from "./core/infra/db/GuestRepositoryDatabase"
+import UserRepositoryDatabase from "./core/infra/db/UserRepositoryDatabase"
+import AuthMiddleware from "./middleware"
+import CountGuestsInsideFilteredPage from "./core/application/usecase/CountGuestsInsideFilteredPage"
+import CountGuestsInsideFilteredPageController from "./controllers/CountGuestsInsideFilteredPageController"
 
 let dbInstance: IDatabase<any>
 export function getDbInstance() {
@@ -61,6 +65,20 @@ new ResetPasswordController(app, resetPasswordUser, authMiddleware)
 const registerGuestEntry = RegisterGuestEntry.getInstance(guestDb)
 new RegisterGuestEntryController(app, registerGuestEntry, authMiddleware)
 
+const findGuestInsideFiltered = FindGuestInsideFiltered.getInstance(guestDb)
+new FindGuestsInsideFilteredController(
+  app,
+  findGuestInsideFiltered,
+  authMiddleware
+)
+
+const countGuestsInsideFilteredPage =
+  CountGuestsInsideFilteredPage.getInstance(guestDb)
+new CountGuestsInsideFilteredPageController(
+  app,
+  countGuestsInsideFilteredPage,
+  authMiddleware
+)
 app.listen(3001, () => {
   console.log("Aplicação está rodando na porta 3001")
 })
