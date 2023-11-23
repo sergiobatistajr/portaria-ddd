@@ -10,6 +10,7 @@ import {
   Gauge,
   Cog,
   Table2,
+  Wrench,
   type LucideIcon,
 } from "lucide-react"
 type NavLinksProps = {
@@ -76,6 +77,11 @@ export function NavLinks({ role }: { role: string }) {
         title: "Relatórios",
         href: "/dashboard/report",
         icon: Table2,
+      },
+      {
+        title: "Correção",
+        href: "/dashboard/fix",
+        icon: Wrench,
       },
       {
         title: "Usuários",
