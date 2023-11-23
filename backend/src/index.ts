@@ -23,6 +23,8 @@ import UserRepositoryDatabase from "./core/infra/db/UserRepositoryDatabase"
 import AuthMiddleware from "./middleware"
 import CountGuestsInsideFilteredPage from "./core/application/usecase/CountGuestsInsideFilteredPage"
 import CountGuestsInsideFilteredPageController from "./controllers/CountGuestsInsideFilteredPageController"
+import RegisterGuestDeparture from "./core/application/usecase/RegisterGuestDeparture"
+import RegisterGuestDepartureController from "./controllers/RegisterGuestDepartureController"
 
 let dbInstance: IDatabase<any>
 export function getDbInstance() {
@@ -79,6 +81,14 @@ new CountGuestsInsideFilteredPageController(
   countGuestsInsideFilteredPage,
   authMiddleware
 )
+
+const registerGuestDeparture = RegisterGuestDeparture.getInstance(guestDb)
+new RegisterGuestDepartureController(
+  app,
+  registerGuestDeparture,
+  authMiddleware
+)
+
 app.listen(3001, () => {
   console.log("Aplicação está rodando na porta 3001")
 })
