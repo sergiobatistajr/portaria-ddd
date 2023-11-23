@@ -22,7 +22,7 @@ export default class RegisterGuestDeparture {
       throw new Error("Visitante não existe")
     }
     status = "finished"
-    if (input.departureDate < guest.entryDate) {
+    if (new Date(input.departureDate) < guest.entryDate) {
       throw new Error("Data de saída não pode ser menor que a data de entrada!")
     }
     const updatedGuest = Guest.create(
