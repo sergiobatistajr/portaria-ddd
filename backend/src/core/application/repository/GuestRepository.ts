@@ -4,6 +4,7 @@ export type findAllGuestFilteredOutput = {
 } & Guest
 
 export default interface GuestRepository {
+  findAllByMonthAndYear(date: string): Promise<Guest[]>
   findById(id: string): Promise<Guest | null>
   findByNameAndStatusWithOutPlate(
     name: string,
