@@ -31,6 +31,8 @@ import CountAllGuestsFilteredPageController from "./controllers/CountAllGuestsFi
 import CountAllGuestFilteredPage from "./core/application/usecase/CountAllGuestFilteredPage"
 import GuestsGenerateDataChartsController from "./controllers/GuestsGenerateDataChartsController"
 import GuestsGenerateDataCharts from "./core/application/usecase/GuestsGenerateDataCharts"
+import FixGuest from "./core/application/usecase/FixGuest"
+import FixGuestController from "./controllers/FixGuestController"
 
 let dbInstance: IDatabase<any>
 export function getDbInstance() {
@@ -112,6 +114,9 @@ new GuestsGenerateDataChartsController(
   guestsGenerateDataCharts,
   authMiddleware
 )
+
+const fixGuests = FixGuest.getInstance(guestDb)
+new FixGuestController(app, fixGuests, authMiddleware)
 app.listen(3001, () => {
   console.log("Aplicação está rodando na porta 3001")
 })
