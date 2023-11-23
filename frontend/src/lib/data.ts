@@ -2,6 +2,27 @@
 import { unstable_noStore as noStore } from "next/cache"
 import { cookies } from "next/headers"
 const URL = `${process.env.EXPRESS_URL}`
+
+export async function fetchGuestChart() {
+  noStore()
+  try {
+    const token = cookies().get("token")?.value
+    const url = `${URL}/guests/chart`
+    const chart = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    await new Promise((resolve) => setTimeout(resolve, 3000))
+    return chart.json()
+  } catch (error) {
+    if (error instanceof Error) {
+      return console.log(error.message)
+    }
+  }
+}
 export async function fetchUserById(id: string) {
   noStore()
   try {
