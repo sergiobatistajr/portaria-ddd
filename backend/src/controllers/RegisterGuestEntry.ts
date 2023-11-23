@@ -29,6 +29,7 @@ export default class RegisterGuestEntryController {
           pax,
           plate,
         })
+        return res.status(200).end()
       } catch (error) {
         if (error instanceof Error) {
           return res.status(500).send(error.message).end()
