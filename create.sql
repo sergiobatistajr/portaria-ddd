@@ -20,5 +20,4 @@ create table portaria.guest (
     departureDate timestamp,
     status text
 )
-INSERT INTO usuarios (id, nome, email, status, role, senha)
-VALUES ('c5da78c3-b12c-42e2-9114-3468c889dace', 'Sérgio Batista', 'sergio@gmail.com', 'active', 'admin', '$2a$12$1Omy0q.B8Wf.Q329tAzUq.Ua3hrDVq.KTu1Ijsc2PzjX2XC3ccvGm');
+insert into portaria.user (id, name, email, status, role, password) values ('c5da78c3-b12c-42e2-9114-3468c889dace', 'Sérgio Batista', 'sergio@gmail.com', 'active', 'admin', '$2a$12$1Omy0q.B8Wf.Q329tAzUq.Ua3hrDVq.KTu1Ijsc2PzjX2XC3ccvGm');
