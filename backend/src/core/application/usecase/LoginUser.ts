@@ -31,8 +31,6 @@ export default class LoginUser {
     }
     const token = JWTProvider.sign({
       userId: user.id,
-      userName: user.name,
-      userEmail: user.email,
       userRole: user.role,
     })
 
