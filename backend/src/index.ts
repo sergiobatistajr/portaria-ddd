@@ -25,6 +25,10 @@ import CountGuestsInsideFilteredPage from "./core/application/usecase/CountGuest
 import CountGuestsInsideFilteredPageController from "./controllers/CountGuestsInsideFilteredPageController"
 import RegisterGuestDeparture from "./core/application/usecase/RegisterGuestDeparture"
 import RegisterGuestDepartureController from "./controllers/RegisterGuestDepartureController"
+import FindAllGuestFiltered from "./core/application/usecase/FindAllGuestFiltered"
+import FindAllGuestsFilteredController from "./controllers/FindAllGuestsFilteredController"
+import CountAllGuestsFilteredPageController from "./controllers/CountAllGuestsFilteredPageController"
+import CountAllGuestFilteredPage from "./core/application/usecase/CountAllGuestFilteredPage"
 
 let dbInstance: IDatabase<any>
 export function getDbInstance() {
@@ -89,6 +93,16 @@ new RegisterGuestDepartureController(
   authMiddleware
 )
 
+const findAllGuestsFiltered = FindAllGuestFiltered.getInstance(guestDb)
+new FindAllGuestsFilteredController(app, findAllGuestsFiltered, authMiddleware)
+
+const countAllGuestsFilteredPage =
+  CountAllGuestFilteredPage.getInstance(guestDb)
+new CountAllGuestsFilteredPageController(
+  app,
+  countAllGuestsFilteredPage,
+  authMiddleware
+)
 app.listen(3001, () => {
   console.log("Aplicação está rodando na porta 3001")
 })
