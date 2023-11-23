@@ -6,12 +6,32 @@ import { IDatabase } from "pg-promise"
 
 export default class GuestRepositoryDatabase implements GuestRepository {
   private static instance: GuestRepositoryDatabase
-  private constructor(private db: IDatabase<any>) {}
   public static getInstance(db: IDatabase<any>): GuestRepositoryDatabase {
     if (!GuestRepositoryDatabase.instance) {
       GuestRepositoryDatabase.instance = new GuestRepositoryDatabase(db)
     }
     return GuestRepositoryDatabase.instance
+  }
+  private constructor(private db: IDatabase<any>) {}
+  async findAllByMonthAndYear(date: string): Promise<Guest[]> {
+    const selectSQL =
+      "select * from portaria.guest where TO_CHAR(entryDate, 'MM/YYYY') = $1"
+    const guests = await this.db.any(selectSQL, [date])
+    return guests.map((guest) =>
+      Guest.create(
+        guest.name,
+        guest.entrydate,
+        guest.createdby,
+        guest.plate,
+        guest.model,
+        parseInt(guest.pax),
+        parseInt(guest.apartment),
+        guest.observation,
+        guest.status,
+        guest.departuredate,
+        guest.id
+      )
+    )
   }
   async findAllGuestFiltered(
     query: string,
