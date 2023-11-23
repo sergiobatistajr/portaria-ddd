@@ -49,32 +49,48 @@ export async function fetchUserById(id: string) {
 //     }
 //   }
 // }
-// export async function fetchGuestFilteredInside(
-//   query: string,
-//   currentPage: number
-// ) {
-//   noStore()
-//   try {
-//     const guests = await findGuestInsideFiltered.execute(query, currentPage)
-//     return guests
-//   } catch (error) {
-//     if (error instanceof Error) {
-//       console.log(error.message)
-//     }
-//   }
-// }
+export async function fetchGuestFilteredInside(
+  query: string,
+  currentPage: number
+) {
+  noStore()
+  try {
+    const token = cookies().get("token")?.value
+    let url = `${URL}/guests-inside?query=${query}&currentPage=${currentPage}`
+    const guestsInside = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return guestsInside.json()
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message)
+    }
+  }
+}
 
-// export async function fetchCountGuestsInsideFilteredPages(query: string) {
-//   noStore()
-//   try {
-//     const totalPages = await countGuestsInsideFilteredPage.execute(query)
-//     return totalPages
-//   } catch (error) {
-//     if (error instanceof Error) {
-//       console.log(error.message)
-//     }
-//   }
-// }
+export async function fetchCountGuestsInsideFilteredPages(query: string) {
+  noStore()
+  try {
+    const token = cookies().get("token")?.value
+    let url = `${URL}/guests-inside/count?query=${query}`
+    const totalPages = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return totalPages.json()
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message)
+    }
+  }
+}
 
 export async function fetchUsersFiltered(query: string, currentPage: number) {
   noStore()
