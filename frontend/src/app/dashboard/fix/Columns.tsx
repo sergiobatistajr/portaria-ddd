@@ -1,18 +1,19 @@
 "use client"
 
-import DialogExitGuest from "@/components/DialogExit"
+import FixDialog from "@/components/FixDialog"
 import { ColumnDef } from "@tanstack/react-table"
 type DTO = {
   id: string
   nomeCompleto: string
   dataEntrada: string
-  dataSaida: string
-  placa: string
-  modelo: string
-  apartamento: string
-  observacao: string
+  status: string
+  dataSaida?: string
+  placa?: string
+  modelo?: string
+  apartamento?: string
+  observacao?: string
   entradaPor: string
-  passageiros: string
+  passageiros?: string
 }
 
 export const columns: ColumnDef<DTO>[] = [
@@ -52,8 +53,35 @@ export const columns: ColumnDef<DTO>[] = [
     id: "actions",
     header: "Corrigir",
     cell: ({ row }) => {
-      const { id, nomeCompleto, placa, dataEntrada } = row.original
-      return <button>...</button>
+      const {
+        id,
+        nomeCompleto,
+        placa,
+        dataEntrada,
+        entradaPor,
+        status,
+        apartamento,
+        dataSaida,
+        modelo,
+        observacao,
+        passageiros,
+      } = row.original
+      return (
+        <FixDialog
+          createdBy={entradaPor}
+          entryDate={dataEntrada}
+          id={id}
+          name={nomeCompleto}
+          status={status}
+          apartment={apartamento ? parseInt(apartamento) : undefined}
+          departureDate={dataSaida}
+          key={id}
+          model={modelo}
+          observation={observacao}
+          pax={passageiros ? parseInt(passageiros) : undefined}
+          plate={placa}
+        />
+      )
     },
   },
 ]
