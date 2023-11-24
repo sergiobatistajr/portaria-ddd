@@ -35,6 +35,7 @@ export default class FixGuestController {
           departureDate,
           status,
         })
+        return res.status(200).end()
       } catch (error) {
         if (error instanceof Error) {
           return res.status(500).send(error.message).end()
