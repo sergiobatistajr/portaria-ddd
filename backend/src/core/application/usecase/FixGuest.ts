@@ -11,8 +11,47 @@ export default class FixGuest {
     return FixGuest.instance
   }
   async execute(input: Input): Promise<void> {
-    if (input.id || !input.name || !input.entryDate || !input.createdBy) {
+    if (!input.id || !input.name || !input.entryDate || !input.createdBy) {
       throw new Error("Campos obrigatórios")
+    }
+    if (
+      input.departureDate &&
+      new Date(input.entryDate) > new Date(input.departureDate)
+    ) {
+      throw new Error("Data de saída não pode ser menor que a data de entrada!")
+    }
+    type FieldDependencies = { [key: string]: string[] }
+    const fieldDependencies: FieldDependencies = {
+      plate: ["model", "pax"],
+      model: ["plate", "pax"],
+      pax: ["plate", "model"],
+    }
+    function checkDependencies(
+      input: any,
+      fieldDependencies: FieldDependencies
+    ) {
+      let errors: Set<string> = new Set()
+      const translate: { [key: string]: string } = {
+        model: "modelo",
+        plate: "placa",
+        pax: "passageiros",
+      }
+      for (let key in fieldDependencies) {
+        if (input[key]) {
+          for (let value of fieldDependencies[key]) {
+            if (!input[value]) {
+              errors.add(
+                `Se ${translate[key]} é fornecido, ${translate[value]} também deve ser fornecido.`
+              )
+            }
+          }
+        }
+      }
+      return Array.from(errors)
+    }
+    let errors = checkDependencies(input, fieldDependencies)
+    if (errors.length > 0) {
+      throw new Error(errors.join(" "))
     }
     await this.guestRepository.update(
       Guest.create(
