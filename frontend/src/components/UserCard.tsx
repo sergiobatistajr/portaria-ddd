@@ -3,10 +3,10 @@ import { Card, CardContent, CardHeader } from "./ui/card"
 
 export default function UserCard({
   name,
-  total,
+  total_guests,
 }: {
   name: string
-  total: string
+  total_guests: number
 }) {
   return (
     <section className="hidden xl:block w-[150px]">
@@ -16,7 +16,7 @@ export default function UserCard({
         </CardHeader>
         <CardContent className="flex space-x-2">
           <TrendingUp className="w-6 h-6" />
-          <p>{total}</p>
+          <p>{total_guests}</p>
         </CardContent>
       </Card>
     </section>
