@@ -1,8 +1,13 @@
 import { Suspense } from "react"
 import GenerateChart from "./GenerateChart"
 import GuestChartSkeleton from "@/components/GuestChartSkeleton"
-import { Card } from "@/components/ui/card"
-
+import ListUserCard from "@/components/ListUserCard"
+const data = [
+  {
+    name: "Sérgio Batista",
+    total: "12312312",
+  },
+]
 export default async function Page() {
   return (
     <main className="flex">
@@ -11,11 +16,8 @@ export default async function Page() {
           <GenerateChart />
         </Suspense>
       </div>
-      <div className="flex-shrink w-1/8">
-        <Card className="text-center">
-          <h1>Joao Sérgio</h1>
-          <p>300</p>
-        </Card>
+      <div className="flex-shrink w-1/7 max-h-[650px] overflow-auto">
+        <ListUserCard users={data} />
       </div>
     </main>
   )
