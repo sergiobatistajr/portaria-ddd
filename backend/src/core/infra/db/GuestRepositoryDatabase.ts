@@ -13,6 +13,13 @@ export default class GuestRepositoryDatabase implements GuestRepository {
     return GuestRepositoryDatabase.instance
   }
   private constructor(private db: IDatabase<any>) {}
+  async countAllGuestsByAllUsers(): Promise<{ name: string; total: number }[]> {
+    const selectSQL =
+      "SELECT u.name, COUNT(g.id) AS total_guests FROM portaria.user AS u LEFT JOIN portaria.guest AS g ON u.id = g.createdBy GROUP BY u.name ORDER BY u.name ASC"
+    const output = await this.db.any(selectSQL)
+
+    return output
+  }
   async findAllByMonthAndYear(date: string): Promise<Guest[]> {
     const selectSQL =
       "select * from portaria.guest where TO_CHAR(entryDate, 'MM/YYYY') = $1"
