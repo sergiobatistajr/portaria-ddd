@@ -6,6 +6,78 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 const URL = `${process.env.EXPRESS_URL}`
+export async function fixGuest(prevState: any, formData: FormData) {
+  const validatedFields = z
+    .object({
+      id: z.string().min(1),
+      name: z.string().min(1),
+      entryDate: z.string().min(1),
+      createdBy: z.string().min(1),
+      status: z.string().min(1),
+      plate: z.string().optional(),
+      model: z.string().optional(),
+      pax: z.coerce.number().optional(),
+      apartment: z.coerce.number().optional(),
+      observation: z.string().optional(),
+      departureDate: z.string().optional(),
+    })
+    .safeParse(Object.fromEntries(formData))
+  if (validatedFields.success) {
+    const {
+      id,
+      createdBy,
+      entryDate,
+      name,
+      status,
+      apartment,
+      departureDate,
+      model,
+      observation,
+      pax,
+      plate,
+    } = validatedFields.data
+    try {
+      const token = cookies().get("token")?.value
+      const url = `${URL}/fix-guests/${id}`
+      const res = await fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          createdBy,
+          entryDate,
+          name,
+          status,
+          apartment,
+          departureDate,
+          model,
+          observation,
+          pax,
+          plate,
+        }),
+      })
+      if (!res.ok) {
+        const errorMessage = await res.text()
+        throw new Error(errorMessage)
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        return { message: error.message }
+      }
+    }
+  } else if (validatedFields.error) {
+    return { message: validatedFields.error.message }
+  }
+  revalidatePath("/dashboard/exit")
+  revalidatePath("/dashboard/fix")
+  revalidatePath("/dashboard/report")
+  return {
+    error: false,
+    message: "Sucesso",
+  }
+}
 export async function resetPassword(prevState: any, formData: FormData) {
   const validatedFields = z
     .object({
@@ -114,6 +186,8 @@ export async function saveExitGuest(prevState: any, formData: FormData) {
     return { message: validatedFields.error.message }
   }
   revalidatePath("/dashboard/exit")
+  revalidatePath("/dashboard/fix")
+  revalidatePath("/dashboard/report")
 }
 export async function saveEntryGuest(prevState: any, formData: FormData) {
   const session = await auth()
@@ -161,6 +235,8 @@ export async function saveEntryGuest(prevState: any, formData: FormData) {
     return { error: true, message: validatedFields.error.message }
   }
   revalidatePath("/dashboard/exit")
+  revalidatePath("/dashboard/fix")
+  revalidatePath("/dashboard/report")
   return {
     error: false,
     message: "Sucesso",
@@ -220,6 +296,8 @@ export async function saveEntryVehicle(prevState: any, formData: FormData) {
     }
   }
   revalidatePath("/dashboard/exit")
+  revalidatePath("/dashboard/fix")
+  revalidatePath("/dashboard/report")
   return {
     error: false,
     message: "Sucesso",
