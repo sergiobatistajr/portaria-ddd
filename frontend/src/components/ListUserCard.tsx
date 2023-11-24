@@ -5,13 +5,17 @@ export default function ListUserCard({
 }: {
   users: {
     name: string
-    total: string
+    total_guests: number
   }[]
 }) {
   return (
     <>
       {users.map((user, index) => (
-        <UserCard key={index} name={user.name} total={user.total} />
+        <UserCard
+          key={index}
+          name={user.name}
+          total_guests={user.total_guests}
+        />
       ))}
     </>
   )
