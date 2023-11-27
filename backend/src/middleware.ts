@@ -30,17 +30,21 @@ export default class AuthMiddleware {
       if (!/^Bearer$/i.test(scheme)) {
         return res.status(401).json({ error: "Token malformatted" })
       }
-
-      const decoded = JWTProvider.verify(token)
-
-      if (typeof decoded === "object" && "userId" in decoded) {
-        Object.assign(req, {
-          userId: decoded.userId,
-          userRole: decoded.userRole,
-        })
-        next()
-      } else {
-        return res.status(401).json({ error: "Invalid token" })
+      try {
+        const decoded = JWTProvider.verify(token)
+        if (typeof decoded === "object" && "userId" in decoded) {
+          Object.assign(req, {
+            userId: decoded.userId,
+            userRole: decoded.userRole,
+          })
+          next()
+        } else {
+          return res.status(401).json({ error: "Invalid token" })
+        }
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          return res.status(401).json({ error: "Invalid token" })
+        }
       }
     }
   }
