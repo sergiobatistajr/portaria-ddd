@@ -19,6 +19,7 @@ services:
     restart: no
     environment:
       - POSTGRES_URL=postgres://admin:admin@postgres_db:5432/app
+      - JWT_SECHET=dcdf8a0fe31a9ba779f152d022e2bf072622ece0
     ports:
       - 3001:3001
     cpus: "0.2"
