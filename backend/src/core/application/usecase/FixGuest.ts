@@ -1,5 +1,74 @@
 import Guest from "../../domain/entities/Guest"
 import GuestRepository from "../repository/GuestRepository"
+class RequiredFieldError extends Error {
+  constructor(field: string) {
+    super(`Campo obrigatório: ${field}`)
+    this.name = "RequiredFieldError"
+  }
+}
+
+class InvalidDateError extends Error {
+  constructor() {
+    super("Data de saída não pode ser menor que a data de entrada!")
+    this.name = "InvalidDateError"
+  }
+}
+
+class FieldDependencyError extends Error {
+  constructor(errors: string[]) {
+    super(errors.join(" "))
+    this.name = "FieldDependencyError"
+  }
+}
+function checkRequiredFields(input: Input) {
+  const requiredFields = ["id", "name", "entryDate", "createdBy"] as const
+  for (let key of requiredFields) {
+    if (!input[key]) {
+      throw new RequiredFieldError(key)
+    }
+  }
+}
+
+function checkDate(input: Input) {
+  if (
+    input.departureDate &&
+    new Date(input.entryDate) > new Date(input.departureDate)
+  ) {
+    throw new InvalidDateError()
+  }
+}
+function checkDependencies(input: any) {
+  const fieldDependencies = {
+    plate: ["model", "pax"],
+    model: ["plate", "pax"],
+    pax: ["plate", "model"],
+  }
+  let errors: Set<string> = new Set()
+  const translate = {
+    model: "modelo",
+    plate: "placa",
+    pax: "passageiros",
+  }
+  for (let key in fieldDependencies) {
+    if (input[key]) {
+      for (let value of fieldDependencies[
+        key as keyof typeof fieldDependencies
+      ]) {
+        if (!input[value]) {
+          errors.add(
+            `Se ${translate[key as keyof typeof translate]} é fornecido, ${
+              translate[value as keyof typeof translate]
+            } também deve ser fornecido.`
+          )
+        }
+      }
+    }
+  }
+  const aerros = Array.from(errors)
+  if (aerros.length > 0) {
+    throw new FieldDependencyError(aerros)
+  }
+}
 
 export default class FixGuest {
   private static instance: FixGuest
@@ -11,48 +80,9 @@ export default class FixGuest {
     return FixGuest.instance
   }
   async execute(input: Input): Promise<void> {
-    if (!input.id || !input.name || !input.entryDate || !input.createdBy) {
-      throw new Error("Campos obrigatórios")
-    }
-    if (
-      input.departureDate &&
-      new Date(input.entryDate) > new Date(input.departureDate)
-    ) {
-      throw new Error("Data de saída não pode ser menor que a data de entrada!")
-    }
-    type FieldDependencies = { [key: string]: string[] }
-    const fieldDependencies: FieldDependencies = {
-      plate: ["model", "pax"],
-      model: ["plate", "pax"],
-      pax: ["plate", "model"],
-    }
-    function checkDependencies(
-      input: any,
-      fieldDependencies: FieldDependencies
-    ) {
-      let errors: Set<string> = new Set()
-      const translate: { [key: string]: string } = {
-        model: "modelo",
-        plate: "placa",
-        pax: "passageiros",
-      }
-      for (let key in fieldDependencies) {
-        if (input[key]) {
-          for (let value of fieldDependencies[key]) {
-            if (!input[value]) {
-              errors.add(
-                `Se ${translate[key]} é fornecido, ${translate[value]} também deve ser fornecido.`
-              )
-            }
-          }
-        }
-      }
-      return Array.from(errors)
-    }
-    let errors = checkDependencies(input, fieldDependencies)
-    if (errors.length > 0) {
-      throw new Error(errors.join(" "))
-    }
+    checkRequiredFields(input)
+    checkDate(input)
+    checkDependencies(input)
     await this.guestRepository.update(
       Guest.create(
         input.name,
