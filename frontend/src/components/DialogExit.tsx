@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label"
 import { saveExitGuest } from "@/lib/actions"
 import { CalendarClock } from "lucide-react"
 import { useFormState } from "react-dom"
-
+import { useState, useEffect } from "react"
 export default function DialogExitGuest({
   id,
   name,
@@ -26,8 +26,16 @@ export default function DialogExitGuest({
   plate?: string
 }) {
   const [state, formAction] = useFormState(saveExitGuest, undefined)
+  const [isOpen, setIsOpen] = useState(false)
+  useEffect(() => {
+    if (state && state.message === "Sucesso") {
+      setIsOpen(false)
+      state.message = ""
+    }
+  }, [state?.message])
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={() => setIsOpen((old) => !old)}>
       <DialogTrigger asChild>
         <Button variant="link" className="space-x-1">
           <CalendarClock />
