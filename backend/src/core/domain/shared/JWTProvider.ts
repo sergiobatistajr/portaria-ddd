@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 
 export default class JWTProvider {
-  private static secretKey = process.env.JWT_SECHET!
+  private static secretKey = process.env.JWT_SECRET!
   static sign(payload: object, expiresIn: string | number = "7d"): string {
     return jwt.sign(payload, this.secretKey, { expiresIn })
   }
