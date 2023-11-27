@@ -2,7 +2,7 @@ import { auth, signOut } from "@/auth"
 import { PowerIcon } from "@heroicons/react/24/outline"
 import { NavLinks } from "./NavLinks"
 import { Button } from "./ui/button"
-import { cookies } from "next/headers"
+
 export async function SideNav() {
   const session = await auth()
   return (
@@ -11,7 +11,6 @@ export async function SideNav() {
       <form
         action={async () => {
           "use server"
-          cookies().delete("token")
           await signOut()
         }}
       >
