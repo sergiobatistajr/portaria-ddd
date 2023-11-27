@@ -13,6 +13,7 @@ import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { useFormState } from "react-dom"
 import { fixGuest } from "@/lib/actions"
+import { useEffect, useState } from "react"
 
 export default function FixDialog({
   id,
@@ -40,8 +41,16 @@ export default function FixDialog({
   departureDate?: string
 }) {
   const [state, formAction] = useFormState(fixGuest, undefined)
+  const [isOpen, setIsOpen] = useState(false)
+  useEffect(() => {
+    if (state && state.message === "Sucesso") {
+      setIsOpen(false)
+      state.message = ""
+    }
+  }, [state?.message])
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={() => setIsOpen((old) => !old)}>
       <DialogTrigger asChild>
         <Button variant="link" className="space-x-1">
           <ClipboardEdit />
