@@ -4,12 +4,14 @@ declare module "@auth/core/types" {
   interface User {
     role?: string
     status?: string
+    token?: string
   }
   interface Session {
     user: {
       id?: string
       role?: string
       status?: string
+      token?: string
     } & DefaultSession["user"]
   }
 }
@@ -22,7 +24,13 @@ export const authConfig = {
   callbacks: {
     jwt({ token, user }) {
       if (user) {
-        return { ...token, id: user.id, role: user.role, status: user.status }
+        return {
+          ...token,
+          id: user.id,
+          role: user.role,
+          status: user.status,
+          token: user.token,
+        }
       }
       return token
     },
@@ -34,6 +42,7 @@ export const authConfig = {
           id: token.id,
           role: token.role,
           status: token.status,
+          token: token.token,
         },
       }
     },
