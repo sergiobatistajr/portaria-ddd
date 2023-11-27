@@ -4,8 +4,9 @@ import { signIn } from "@/auth"
 import { auth } from "@/auth"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
-import { cookies } from "next/headers"
+
 const URL = `${process.env.EXPRESS_URL}`
+
 export async function fixGuest(prevState: any, formData: FormData) {
   const validatedFields = z
     .object({
@@ -37,13 +38,13 @@ export async function fixGuest(prevState: any, formData: FormData) {
       plate,
     } = validatedFields.data
     try {
-      const token = cookies().get("token")?.value
+      const session = await auth()
       const url = `${URL}/fix-guests/${id}`
       const res = await fetch(url, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${session?.user.token}`,
         },
         body: JSON.stringify({
           createdBy,
@@ -89,13 +90,13 @@ export async function resetPassword(prevState: any, formData: FormData) {
   if (validatedFields.success) {
     const { id, confirmPassword, password } = validatedFields.data
     try {
+      const session = await auth()
       const url = `${URL}/users/reset-password/${id}`
-      const token = cookies().get("token")?.value
       const res = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${session?.user.token}`,
         },
         body: JSON.stringify({ confirmPassword, password }),
       })
@@ -127,13 +128,13 @@ export async function updateUser(prevState: any, formData: FormData) {
   if (validatedFields.success) {
     const { email, name, id, status, role } = validatedFields.data
     try {
-      const token = cookies().get("token")?.value
+      const session = await auth()
       const url = `${URL}/users/${id}`
       const res = await fetch(url, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${session?.user.token}`,
         },
         body: JSON.stringify({ email, name, role, status }),
       })
@@ -163,13 +164,13 @@ export async function saveExitGuest(prevState: any, formData: FormData) {
   if (validatedFields.success) {
     const { id, departureDate } = validatedFields.data
     try {
-      const token = cookies().get("token")?.value
+      const session = await auth()
       const url = `${URL}/guests/${id}`
       const res = await fetch(url, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${session?.user.token}`,
         },
         body: JSON.stringify({ departureDate }),
       })
@@ -206,13 +207,13 @@ export async function saveEntryGuest(prevState: any, formData: FormData) {
     const { name, entryDate, apartment, observation } = validatedFields.data
     if (session?.user.id)
       try {
-        const token = cookies().get("token")?.value
+        const session = await auth()
         const url = `${URL}/guests`
         const res = await fetch(url, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${session?.user.token}`,
           },
           body: JSON.stringify({
             name,
@@ -266,13 +267,13 @@ export async function saveEntryVehicle(prevState: any, formData: FormData) {
         createdBy: session?.user?.id,
       }
       try {
-        const token = cookies().get("token")?.value
+        const session = await auth()
         const url = `${URL}/guests`
         const res = await fetch(url, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${session?.user.token}`,
           },
           body: JSON.stringify(input),
         })
@@ -330,13 +331,13 @@ export async function createUser(prevState: any, formData: FormData) {
     const { email, name, password, confirmPassword, role } =
       validatedFields.data
     try {
-      const token = cookies().get("token")?.value
+      const session = await auth()
       const url = `${URL}/users`
       const res = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${session?.user.token}`,
         },
         body: JSON.stringify({ email, name, password, confirmPassword, role }),
       })
