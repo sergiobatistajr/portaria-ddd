@@ -16,7 +16,7 @@ export default class UserRepositoryDatabase implements UserRepository {
     const updateSQL = "update portaria.user set password = $1 where id = $2"
     await this.db.none(updateSQL, [password, id])
   }
-  async update(user: Omit<User, "password">): Promise<void> {
+  async update(user: User): Promise<void> {
     const { id, ...data } = user
     const keys = Object.keys(data)
     const values = Object.values(data)
@@ -26,8 +26,7 @@ export default class UserRepositoryDatabase implements UserRepository {
     await this.db.none(updateSQL, [...values, id])
   }
   async findById(id: string): Promise<User | null> {
-    const selectSQL =
-      "select id, name, email, role, status from portaria.user where id = $1"
+    const selectSQL = "select * from portaria.user where id = $1"
     const user = await this.db.oneOrNone(selectSQL, [id])
     return user
       ? User.create({
@@ -36,6 +35,7 @@ export default class UserRepositoryDatabase implements UserRepository {
           email: user.email,
           role: user.role,
           status: user.status,
+          password: user.password,
         })
       : null
   }
