@@ -46,16 +46,6 @@ export function NavLinks({ role }: { role: string }) {
         href: "/dashboard/report",
         icon: Table2,
       },
-      {
-        title: "Entrada",
-        href: "/dashboard/entry/vehicle",
-        icon: UserPlus,
-      },
-      {
-        title: "Saídas",
-        href: "/dashboard/exit",
-        icon: UserMinus,
-      },
     ],
     admin: [
       {
