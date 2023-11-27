@@ -189,6 +189,9 @@ export async function saveExitGuest(prevState: any, formData: FormData) {
   revalidatePath("/dashboard/exit")
   revalidatePath("/dashboard/fix")
   revalidatePath("/dashboard/report")
+  return {
+    message: "Sucesso",
+  }
 }
 export async function saveEntryGuest(prevState: any, formData: FormData) {
   const session = await auth()
