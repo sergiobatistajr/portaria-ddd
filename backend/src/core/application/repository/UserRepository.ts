@@ -4,7 +4,7 @@ export default interface UserRepository {
   resetPassword(id: string, password: string): Promise<void>
   findById(id: string): Promise<User | null>
   findByEmail(email: string): Promise<User | null>
-  update(user: Omit<User, "password">): Promise<void>
+  update(user: User): Promise<void>
   save(user: User): Promise<void>
   delete(id: string): Promise<void>
   findFilteredUsers(
