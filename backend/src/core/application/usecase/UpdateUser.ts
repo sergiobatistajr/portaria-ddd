@@ -39,6 +39,7 @@ export default class UpdateUser {
         email: input.email,
         role: input.role,
         status: input.status,
+        password: user.password,
       })
     )
   }
