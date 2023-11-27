@@ -24,7 +24,7 @@ async function loginUser({
   }
 
   const data = await res.json()
-  cookies().set("token", data.token, { httpOnly: true })
+  // cookies().set("token", data.token, { httpOnly: true })
   return data
 }
 
