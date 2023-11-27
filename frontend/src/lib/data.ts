@@ -1,18 +1,18 @@
 "use server"
 import { unstable_noStore as noStore } from "next/cache"
-import { cookies } from "next/headers"
 const URL = `${process.env.EXPRESS_URL}`
+import { auth } from "@/auth"
 
 export async function fetchListUserCard() {
   noStore()
   try {
-    const token = cookies().get("token")?.value
+    const session = await auth()
     const url = `${URL}/verify-registers`
     const users = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session?.user.token}`,
       },
     })
     return users.json()
@@ -26,13 +26,13 @@ export async function fetchListUserCard() {
 export async function fetchGuestChart() {
   noStore()
   try {
-    const token = cookies().get("token")?.value
+    const session = await auth()
     const url = `${URL}/guests/chart`
     const chart = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session?.user.token}`,
       },
     })
     return chart.json()
@@ -45,13 +45,13 @@ export async function fetchGuestChart() {
 export async function fetchUserById(id: string) {
   noStore()
   try {
-    const token = cookies().get("token")?.value
+    const session = await auth()
     const url = `${URL}/users/${id}`
     const user = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session?.user.token}`,
       },
     })
     return user.json()
@@ -68,13 +68,13 @@ export async function fetchAllGuestFiltered(
 ) {
   noStore()
   try {
-    const token = cookies().get("token")?.value
+    const session = await auth()
     const url = `${URL}/guests-all?query=${query}&currentPage=${currentPage}`
     const guests = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session?.user.token}`,
       },
     })
     return guests.json()
@@ -87,13 +87,13 @@ export async function fetchAllGuestFiltered(
 export async function fetchCountAllGuestsFilteredPages(query: string) {
   noStore()
   try {
-    const token = cookies().get("token")?.value
+    const session = await auth()
     const url = `${URL}/guests-all/count?query=${query}`
     const totalPages = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session?.user.token}`,
       },
     })
     return totalPages.json()
@@ -109,13 +109,13 @@ export async function fetchGuestFilteredInside(
 ) {
   noStore()
   try {
-    const token = cookies().get("token")?.value
+    const session = await auth()
     const url = `${URL}/guests-inside?query=${query}&currentPage=${currentPage}`
     const guestsInside = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session?.user.token}`,
       },
     })
     return guestsInside.json()
@@ -129,13 +129,13 @@ export async function fetchGuestFilteredInside(
 export async function fetchCountGuestsInsideFilteredPages(query: string) {
   noStore()
   try {
-    const token = cookies().get("token")?.value
+    const session = await auth()
     const url = `${URL}/guests-inside/count?query=${query}`
     const totalPages = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session?.user.token}`,
       },
     })
     return totalPages.json()
@@ -149,13 +149,13 @@ export async function fetchCountGuestsInsideFilteredPages(query: string) {
 export async function fetchUsersFiltered(query: string, currentPage: number) {
   noStore()
   try {
-    const token = cookies().get("token")?.value
+    const session = await auth()
     const url = `${URL}/users?query=${query}&currentPage=${currentPage}`
     const users = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session?.user.token}`,
       },
     })
     return users.json()
@@ -169,13 +169,13 @@ export async function fetchUsersFiltered(query: string, currentPage: number) {
 export async function fetchUsersPage(query: string) {
   noStore()
   try {
-    const token = cookies().get("token")?.value
+    const session = await auth()
     const url = `${URL}/users/count?query=${query}`
     const totalPages = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session?.user.token}`,
       },
     })
     return totalPages.json()
